@@ -58,8 +58,6 @@ export class Stage {
   private readonly renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
   private readonly camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 300);
   private readonly labels: StageLabel[] = [];
-  private canvasWidth = 1;
-  private canvasHeight = 1;
 
   constructor(figure: Figure, options: StageOptions) {
     this.figure = figure;
@@ -102,10 +100,10 @@ export class Stage {
     this.renderer.domElement.style.cursor = "grab";
 
     const resize = () => {
-      this.canvasWidth = Math.max(box.clientWidth, 1);
-      this.canvasHeight = Math.max(box.clientHeight, 1);
-      this.renderer.setSize(this.canvasWidth, this.canvasHeight, false);
-      const halfHeight = halfWidth * (this.canvasHeight / this.canvasWidth);
+      const canvasWidth = Math.max(box.clientWidth, 1);
+      const canvasHeight = Math.max(box.clientHeight, 1);
+      this.renderer.setSize(canvasWidth, canvasHeight, false);
+      const halfHeight = halfWidth * (canvasHeight / canvasWidth);
       this.camera.left = -halfWidth;
       this.camera.right = halfWidth;
       this.camera.top = halfHeight;
@@ -153,11 +151,18 @@ export class Stage {
     frameRequest = requestAnimationFrame(drawFrame);
 
     // A printed page cannot move, so before printing the scene is run far
-    // ahead, to the end of whatever it was doing, and drawn once.
+    // ahead, to the end of whatever it was doing, and drawn once. A browser
+    // does not reliably print a 3D canvas, so the drawing is copied into an
+    // ordinary image, which the print stylesheet shows in its place.
+    const printImage = document.createElement("img");
+    printImage.className = "fig-print";
+    printImage.alt = "";
+    box.prepend(printImage);
     const drawForPrint = () => {
       this.onFrame(1000);
       this.renderer.render(this.scene, this.camera);
       this.placeLabels();
+      printImage.src = this.renderer.domElement.toDataURL("image/png");
     };
     window.addEventListener("beforeprint", drawForPrint);
 
@@ -182,16 +187,16 @@ export class Stage {
     return label;
   }
 
-  // Moves each label to where its point appears on the canvas.
+  // Moves each label to where its point appears on the canvas. The place
+  // is a percentage of the canvas, so it stays right when the canvas
+  // changes size, as it does on a printed page.
   private placeLabels(): void {
     const onCanvas = new THREE.Vector3();
     for (const label of this.labels) {
       onCanvas.copy(label.position).project(this.camera);
-      const x = (onCanvas.x * 0.5 + 0.5) * this.canvasWidth;
-      const y = (1 - (onCanvas.y * 0.5 + 0.5)) * this.canvasHeight;
+      label.element.style.left = `${((onCanvas.x * 0.5 + 0.5) * 100).toFixed(2)}%`;
+      label.element.style.top = `${((1 - (onCanvas.y * 0.5 + 0.5)) * 100).toFixed(2)}%`;
       label.element.style.opacity = label.shown ? "1" : "0";
-      label.element.style.transform =
-        `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -120%)`;
     }
   }
 }

@@ -193,6 +193,8 @@ figure.visual > :not(:defined) {
   position: absolute;
   left: 0;
   top: 0;
+  /* The label sits centered just above its point. */
+  transform: translate(-50%, -120%);
   color: #55555c;
   font-family: var(--sans);
   /* Labels shrink with the canvas on a narrow screen. */
@@ -209,6 +211,11 @@ figure.visual > :not(:defined) {
 
 .fig-label b {
   color: #2a2a2e;
+}
+
+/* The still image of the canvas, shown only on a printed page. */
+.fig-print {
+  display: none;
 }
 
 /* The Pause button in the corner of every canvas. */
@@ -473,9 +480,17 @@ h4 {
     padding: 0;
   }
 
-  .quiz-question,
-  .key-entry {
+  .quiz-question {
     break-inside: avoid;
+  }
+
+  /* A key entry can be longer than a page, so it may break, but not just
+     after a heading. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
   }
 
   .working-space {
@@ -490,7 +505,27 @@ h4 {
 
   figure.visual {
     max-width: 13cm;
+    margin-left: auto;
+    margin-right: auto;
     break-inside: avoid;
+  }
+
+  /* The still image takes the place of the live canvas. */
+  .fig-canvas canvas {
+    display: none;
+  }
+
+  .fig-print {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Backgrounds are kept, so the figure panel and label chips print. */
+  .fig-canvas,
+  .fig-label {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 
   .answer-key {
