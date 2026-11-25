@@ -125,6 +125,7 @@ times and compare the frequencies against the computed answer.
 - Quizzes, and problem variants. The course publishes practice problems and
   no quizzes, and each problem has one fixed version.
 - A full-screen page for each visual, and versioned addresses.
+- Short videos. They are an experiment outside v1; see "Short videos".
 - Any LLM at runtime
 - Any backend or database
 - The school layer: accounts, class codes, grades, student tracking
@@ -156,6 +157,7 @@ traction.
 | Math and code | KaTeX, build-time highlighting | Yes |
 | Print | HTML + print CSS | Yes |
 | In-class kit | Markdown slide decks built by the engine, one HTML file each | Yes |
+| Short videos | Remotion for the picture, ElevenLabs for the voice | No, an experiment |
 | Language and repos | TypeScript throughout, two repos | Yes |
 | Identity and LMS | Standalone LMS; class code, then school sign-on | Deferred, school layer |
 
@@ -350,6 +352,33 @@ a changed deck without installing anything is not worked out.
 A lesson and its visuals are the fixed reference, so their addresses are to
 carry a version, so that a deck made one year still opens what it pointed to
 after a lesson or a visual is revised. Not built.
+
+### Short videos
+
+Not built. The author is trying this out by hand first. A short is a
+vertical video of under a minute that walks through one example from a
+lesson (the Titanic table, the dice turned around, the late bus), so that
+a student meets the same idea from one more direction. A short is free and
+public like the rest of the course.
+
+- **The picture is rendered from code, not from a video model.** A video
+  model cannot draw a correct table or fraction. Remotion renders a video
+  from web code, so the flat drawings made for the slides (a table, a grid,
+  a tree, each already in steps with a caption) can be reused, and every
+  number stays exact. Remotion also writes the captions and the vertical
+  1080 by 1920 output.
+- **The voice is text-to-speech** from ElevenLabs, read from a script.
+- **An agent drafts each short**: the script, the choice of example, and
+  the scene code. A person checks the numbers and the script before it is
+  published, as for a problem or a visual.
+- **Each short follows the class's order**: the question, a pause for the
+  viewer to answer, the drawing walked through, the result in one sentence,
+  then the address of the lesson.
+
+Open: whose voice it is, where the shorts' source files live (this
+repository, the course, or one of their own), and how a wide slide drawing
+is laid out for a tall screen. None of this changes the course layer, and
+no video tool is needed to build or read a course.
 
 ### Language and repos
 
