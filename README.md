@@ -52,7 +52,7 @@ not started and will not be until people are using the course.
 | Part | Contents |
 |---|---|
 | Reading | Markdown lessons with embedded interactive visuals |
-| In-class kit | Visuals in presentation mode, one motivating problem per lesson, discussion prompts |
+| In-class kit | A slide deck per lecture, written in Markdown with the live visuals: one motivating problem, discussion prompts |
 | Problems | Worked examples, problem sets with solutions |
 | Logistics | Syllabus map, pacing guide |
 

@@ -33,8 +33,8 @@ problem may have several answers. Problems on base rates with three causes, a
 negative result, or a second test wait for the lesson on Bayes' rule, and
 problems on independence for that lesson.
 
-A full-screen view of the visuals is most of an in-class kit, so the teacher's
-part is the next thing to reconsider.
+The in-class kit is next: a Markdown slide deck for each lecture, built by
+the engine with the same visuals (see "In-class kit" below).
 
 Visuals are styled after the figures on gtcloudrobotics.com; see
 [VISUALS.md](VISUALS.md).
@@ -124,8 +124,8 @@ times and compare the frequencies against the computed answer.
 - Authoring tools for non-technical teachers
 - Quizzes, and problem variants. The course publishes practice problems and
   no quizzes, and each problem has one fixed version.
-- The in-class kit and its present view. What a teacher needs on screen in
-  class is not worked out yet, so it waits until the lessons exist.
+- The in-class kit: a Markdown slide deck for each lecture, and a
+  full-screen page for each visual. It waits until the lessons exist.
 - Any LLM at runtime
 - Any backend or database
 - The school layer: accounts, class codes, grades, student tracking
@@ -156,7 +156,7 @@ traction.
 | Site | Own shell: a build script, a Markdown parser, and esbuild for the visuals | Yes |
 | Math and code | KaTeX, build-time highlighting | Yes |
 | Print | HTML + print CSS | Yes |
-| In-class kit | A "present" view of the lesson page | Later, not designed |
+| In-class kit | Markdown slide decks built by the engine, one HTML file each | Later |
 | Language and repos | TypeScript throughout, two repos | Yes |
 | Identity and LMS | Standalone LMS; class code, then school sign-on | Deferred, school layer |
 
@@ -284,8 +284,43 @@ last step.
 
 ### In-class kit
 
-Not in v1 and not designed. The starting idea is a "present" view of the
-lesson page: full-screen visual, with the prompts beside it. Nothing to keep in sync with the lesson.
+Not built. A lesson page is the reading for one or two lectures, and it is
+not shown in class: a lecture runs in a different order (pose the question,
+let the room answer, run the visual, work on paper, show the result), so a
+"present" view of the lesson page is ruled out. The lesson is the fixed
+reference. The slide deck is the teacher's own and changes with each
+teacher.
+
+A deck is a Markdown file, one per lecture, in the course's `lectures/`
+folder. The engine turns it into slides. No external slide tool is used;
+Marp, Slidev, and reveal.js are references for how Markdown slides behave.
+
+- **The format is the lesson format.** A line of `---` starts a new slide. A
+  slide holds a heading and a sentence, a formula, or a `::visual` line,
+  which fills the screen with the live visual. Notes for the teacher go
+  under a slide and are not shown to the room. A deck with its notes is also
+  the outline of the lecture: the opening question, the steps in order, the
+  task on paper, one problem to work in class.
+- **Markdown, because a teacher changes a deck with an LLM.** One text file
+  goes into any model and comes back shorter, longer, or with another
+  example, and the change shows as a diff. A slide file (PowerPoint, Google
+  Slides) does not survive that, and it can hold only a picture of a visual.
+- **The output is one file.** The build writes each deck as a single HTML
+  file that holds everything it needs. It opens with no network, fills the
+  screen, and moves with the arrow keys. It prints to PDF with each visual
+  as a still picture, for a handout or for a teacher who wants a fixed copy.
+- **A full-screen page for each visual,** at its own address, showing only
+  the figure and its controls, for a teacher who presents from another tool.
+- **The look comes from one theme.** A deck has no layout controls. A
+  teacher who wants free layout uses the PDF or another tool with the
+  full-screen visual pages.
+
+A teacher needs Node to build a deck, as for the rest of the course. Building
+a changed deck without installing anything is not worked out.
+
+A lesson and its visuals are the fixed reference, so their addresses carry a
+version. A deck made one year still opens what it pointed to after a lesson
+or a visual is revised.
 
 ### Language and repos
 
@@ -298,6 +333,7 @@ what makes "fork the course" and separate licenses work.
 - `course.yaml`: the manifest listing lessons and their problems in order, with stable IDs that are never reused.
 - `lessons/`: one Markdown file per section.
 - `problems/`: one file per problem, with named solution steps.
+- `lectures/`: one Markdown slide deck per lecture. Not built.
 - `visuals/`: one TypeScript file per visual.
 - `package.json` with the `dev` and `build` commands. They run the engine
   from the sibling `../canon` folder for now; a pinned version and the deploy
