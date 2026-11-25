@@ -207,10 +207,10 @@ Where lessons depart from the paper, which is written for researchers:
   importance.
 - Do not rate the material: no "simply", "clearly", "obviously", "elegant",
   "powerful", or "it turns out".
-- A task the reader is meant to do on paper is allowed, as a blockquote
-  prompt ("draw the tree"). That is not a rhetorical question. A
-  prompt asks for real work; it is not there to make the text feel
-  interactive.
+- A blockquote is a callout, set off from the text by a thin rule. Bold words
+  at its start are its label (`> **On paper** Draw the tree.`). It can hold
+  a task to do on paper, a warning, or a side note. A callout holds real
+  content; it is not there to make the text feel interactive.
 
 ## Commits
 

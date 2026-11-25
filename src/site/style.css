@@ -88,11 +88,23 @@ li {
   margin-bottom: 0.3rem;
 }
 
-/* A blockquote is a prompt for the reader to answer on paper. */
+/* A blockquote is a callout: ordinary text set off by a thin rule on the
+   left, with no box. Bold text at its very start is its label, as in
+   "> **On paper** Draw the tree." */
 blockquote {
-  padding: 0.8rem 1.1rem;
-  border-left: 3px solid var(--text);
-  background: var(--tint);
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 2px solid #3a74b8;
+}
+
+blockquote > p:first-child > strong:first-child {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: #3a74b8;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 blockquote > :last-child {

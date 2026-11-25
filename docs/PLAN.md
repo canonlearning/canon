@@ -175,7 +175,7 @@ has to earn its place by doing something Markdown cannot. Two do:
   one.
 
 Everything else is ordinary Markdown. A lesson's title is its first line,
-written as a `#` heading, and a lesson has no front matter. A discussion prompt is a blockquote, and
+written as a `#` heading, and a lesson has no front matter. A callout is a blockquote, with bold words at its start as its label, and
 the motivating problem is the opening of the lesson. Practice problems are not
 written into the lesson: `course.yaml` lists them per lesson and the site adds
 them at the end of the page.
