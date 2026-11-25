@@ -5,10 +5,11 @@
 Site: [canonlearning.ai](https://canonlearning.ai). This repository is the
 engine. The first course is
 [Probability 1](https://github.com/canonlearning/probability-1). So far the
-engine turns a course's Markdown files into static pages with typeset math:
-lessons, practice problems with step-by-step solutions, and quizzes that
-print with an answer key (published practice quizzes, and a teacher's private
-graded ones). The interactive visuals are not built. The
+engine turns a course folder into a static site: Markdown lessons with
+typeset math and interactive visuals drawn with three.js, practice problems
+with worked solutions, and quizzes that print with an answer key (published
+practice quizzes, and a teacher's private graded ones). One lesson with two
+visuals exists. The in-class kit is not built. The
 [plan](docs/PLAN.md) has the pilot scope and the tech picks.
 
 ## Premise

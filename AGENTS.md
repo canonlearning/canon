@@ -1,9 +1,10 @@
 # Canon Learning
 
 The engine behind canonlearning.ai: open courses with interactive visuals, an
-in-class kit, and a problem bank, graded on paper. Built so far: static pages with typeset math for lessons, practice problems
-with step-by-step solutions, and printable quizzes with an answer key.
-Visuals are not built; a `::visual` line renders as an empty box.
+in-class kit, and a problem bank, graded on paper. Built so far: static
+pages for lessons with typeset math and interactive visuals, practice
+problems with worked solutions, and printable quizzes with an answer key. The
+in-class kit is not built.
 
 - The first course is the sibling repository `../probability-1`
   (`canonlearning/probability-1`). Course content goes there: lessons,
@@ -29,7 +30,15 @@ Visuals are not built; a `::visual` line renders as an empty box.
   not used.
 
 `src/content/` reads a course folder into data, and `src/site/` turns that
-data into pages. `example/` is a small course for the tests.
+data into pages and bundles the course's visuals with esbuild. `src/visual/`
+runs in the browser: the base class, the figure frame, and the three.js stage
+that a course's visuals import as `"canon"`. `example/` is a small course for
+the tests.
+
+- `npx tsc --noEmit -p ../probability-1` typechecks the course's visuals.
+- Look at a visual in a browser before calling it done. The Playwright MCP
+  server is set up for this repository; its output folder `.playwright-mcp/`
+  is ignored by git.
 
 ## Documents
 
@@ -38,6 +47,7 @@ data into pages. `example/` is a small course for the tests.
 | `README.md` | The premise, the bet, who it is for, what a course contains, design principles, positioning, open model |
 | `docs/MODEL.md` | The two layers (course and school LMS) and the funding in detail |
 | `docs/PLAN.md` | First milestone, pilot scope, open questions, tech picks |
+| `docs/VISUALS.md` | How visuals look and behave, and the gtcloudrobotics.com figures they are styled after |
 
 Read `docs/PLAN.md` before writing code. A change to scope or to a tech pick
 goes in the plan in the same change. Detail that does not belong in the
@@ -79,6 +89,13 @@ everything else.
   time, and help running the school layer, never access to the software or a
   course. Do not propose paywalls,
   instructor-only content, or features that make self-hosting harder.
+- Visuals are styled like the lesson figures on gtcloudrobotics.com (the
+  sibling repository `../gtcloudrobotics.com`). Read `docs/VISUALS.md` and
+  that repository's figure harness before building one.
+- A lesson is built around its visuals. Text says only what a visual cannot,
+  and the paper tasks ask for work by hand (draw the tree, write out the
+  sample space), not only a number. A lesson that reads as a textbook page
+  with a figure added is wrong.
 - Three picks are expensive to change later: the content format (Markdown +
   directives), the problem schema (one file per problem, one fixed version,
   named solution steps), and visuals as Web Components on one base class. Ask
@@ -111,6 +128,8 @@ everything else.
 - No dates, draft markers, or history. State what is true now, and say
   plainly what is not built.
 - American spelling. Lists stay terse.
+- No "e.g.," or "i.e.,", in documents or in lessons. An example goes in
+  parentheses with nothing in front of it.
 - Wrap Markdown prose at 80 columns. Tables, code blocks, and long URLs are
   exempt.
 
@@ -125,10 +144,12 @@ the repository documents covered above.
 
 Order:
 
-- Start from the need. Open a lesson, and each section, with the question or
-  problem that makes the next idea necessary. The paper's pattern is: what is
-  true, what is missing ("however"), what is therefore required
-  ("therefore"), then what is done.
+- Open a lesson by saying plainly what its idea is, in a sentence or two,
+  and then give the example that the lesson works through. Do not open with
+  a puzzle, a question for the reader, or a "guess before going on" prompt.
+- Open each later section with what is missing so far, so the next idea is
+  needed. The paper's pattern is: what is true, what is missing ("however"),
+  what is therefore required ("therefore"), then what is done.
 - Give the whole before the parts. State the idea in one plain sentence, then
   the detail, then the refinement. Say how many parts there are before
   listing them ("in two stages: first ..., then ...").
@@ -146,7 +167,8 @@ Reasons:
 Examples:
 
 - Follow a general statement with a concrete case, in the same sentence where
-  it fits, in parentheses with "e.g.,".
+  it fits, in parentheses. Do not write "e.g.," or "i.e.,": the parentheses
+  are enough ("any experiment (rolling dice)").
 - Reuse one running example through a lesson, so that only the idea changes
   from section to section.
 - Use numbers, not adjectives: "1 person in 100", not "rare".
@@ -185,8 +207,10 @@ Where lessons depart from the paper, which is written for researchers:
   importance.
 - Do not rate the material: no "simply", "clearly", "obviously", "elegant",
   "powerful", or "it turns out".
-- A question the reader is meant to answer on paper is allowed, as a
-  blockquote prompt. That is not a rhetorical question.
+- A task the reader is meant to do on paper is allowed, as a blockquote
+  prompt ("draw the tree"). That is not a rhetorical question. A
+  prompt asks for real work; it is not there to make the text feel
+  interactive.
 
 ## Commits
 

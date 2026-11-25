@@ -13,8 +13,24 @@ One thin slice, which is also the definition of done for the shell timebox:
 2. One Bayes' rule problem with a three-step solution.
 3. One printed quiz with an answer key.
 
-This is a textbook page with a better visual, plus a quiz to print. The
-in-class kit is not part of it.
+All three are built. The lesson is built around two visuals. In the crowd, 1000
+balls, one per person, arrive one after another, pass the test, and land on
+four stacks by test result and condition. The share of positive tests that
+belong to people with the condition settles as they arrive. A slider changes
+how common the condition is. The student draws the tree on paper, and
+the tree visual then builds itself one step at a time (branches, products,
+the positive paths, the answer) with a sentence for each step.
+
+The text says only what the visuals cannot: the definition, the
+multiplication rule, and the link from the picture to the formula. The prompts
+and the practice problem ask for work on paper (write down the counts, draw
+the tree), not only a number.
+
+A full-screen view of the visuals is most of an in-class kit, so the teacher's
+part is the next thing to reconsider.
+
+Visuals are styled after the figures on gtcloudrobotics.com; see
+[VISUALS.md](VISUALS.md).
 
 Order of work: start in the course repo. Write the first lesson and problem
 file by hand in the intended format, then build the engine to make them
@@ -131,8 +147,8 @@ traction.
 |---|---|---|
 | Content format | Plain Markdown, plus two directives | Yes |
 | Problem schema | One file per problem, one fixed version, named solution steps | Yes |
-| Visual components | Web Components, D3 or plain SVG | Yes |
-| Site | Own shell: a build script and a Markdown parser, Vite when visuals arrive | Yes |
+| Visual components | Web Components, drawn with three.js, 2D or 3D | Yes |
+| Site | Own shell: a build script, a Markdown parser, and esbuild for the visuals | Yes |
 | Math and code | KaTeX, build-time highlighting | Yes |
 | Print | HTML + print CSS | Yes |
 | In-class kit | A "present" view of the lesson page | Later, not designed |
@@ -209,23 +225,37 @@ generated numbers are reconsidered.
 
 ### Visual components
 
-Web Components, drawn with D3 or plain SVG. three.js comes in only if a later
-course needs 3D. The visual library is the core asset, and custom elements are the only packaging that outlives a
+Web Components, drawn with three.js. The full toolset is available, and a
+visual is 2D or 3D, whichever shows its example best. The look follows the
+figures on gtcloudrobotics.com ([VISUALS.md](VISUALS.md)). The visual library is the core asset, and custom elements are the only packaging that outlives a
 framework change.
 
-- Every visual follows one base class and one parameter schema. That is the
-  contract the LLM generates against, and it gives presentation mode and
-  screenshot tests.
-- The experiment simulation is one shared component: a seeded sampler that
-  runs a described experiment many times and reports frequencies, reused by
-  every visual (tree, outcome grid, area diagram). It is the most important
-  component in the pilot.
+- Every visual extends one base class and draws inside one figure frame
+  (canvas, readout, controls, caption). That is the contract an LLM generates
+  against. [VISUALS.md](VISUALS.md) has how to write one.
+- One file per visual in the course's `visuals/` folder. The file name is the
+  name a lesson uses in `::visual{name="..."}`.
+- A visual that is used once keeps its numbers as constants at the top of
+  its file. A visual that is reused takes them from its `::visual` line
+  (`probability="1/10"`), which the engine hands to the visual as
+  written. There is no schema that checks them; the visual reports a missing
+  or malformed one.
+- A problem may place a visual in its solution. It shows the work in a
+  different form from the lesson (the lesson builds a tree, and the
+  solution shows the same products as areas of a square), so the student
+  checks a hand-drawn tree against a second picture and not a copy. On a printed quiz it appears in the answer key as a
+  still picture of its last step.
+- A shared experiment simulation (a seeded sampler that runs an experiment
+  many times and reports frequencies) is not built. The crowd visual shows
+  exact shares in a random arrival order, not random draws. It is built when a lesson needs to show
+  frequencies settling toward a probability.
 
 ### Site
 
 An own shell, built on a Markdown parser. It is a plain build script that
-writes HTML files, because the pages have no browser code yet. Vite comes in
-with the visuals, when there is browser code to bundle. If this becomes a product,
+writes HTML files, and it bundles the course's visuals into one script with
+esbuild. Vite is not used: there is one bundle and no framework, so a bundler
+call is all that is needed. If this becomes a product,
 the engine is what ships, and that needs the control. "Own" means owning the
 shell, not rewriting the bundler or the parser.
 
@@ -266,8 +296,7 @@ what makes "fork the course" and separate licenses work.
   order, with stable IDs that are never reused.
 - `lessons/`: one Markdown file per section.
 - `problems/`: one file per problem, with named solution steps.
-- `visuals/`: components specific to this course, including the experiment
-  simulation.
+- `visuals/`: one TypeScript file per visual.
 - `package.json` with the `dev` and `build` commands. They run the engine
   from the sibling `../canon` folder for now; a pinned version and the deploy
   config come when the site is published.
@@ -277,8 +306,7 @@ what makes "fork the course" and separate licenses work.
 - Content core: the parser that turns lesson and problem files into structured
   data.
 - Shell: the build that produces lesson pages and quiz pages.
-- The visual base class and parameter schema, plus any visuals not tied to one
-  subject.
+- The visual base class, the figure frame, and the three.js stage.
 - A small example course for testing.
 
 ### How a course gets the engine

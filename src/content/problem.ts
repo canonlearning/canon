@@ -34,6 +34,8 @@ export type Problem = {
   statementHtml: string;
   answerHtml: string;
   steps: SolutionStep[];
+  // The names of the visuals the problem places with ::visual.
+  visualNames: string[];
 };
 
 export type SolutionStep = {
@@ -71,7 +73,7 @@ export async function problemTextToProblem(text: string, file: string, id: strin
   }
 
   const tree = parseMarkdown(markdown);
-  prepareTree(tree, markdown, file);
+  const visualNames = prepareTree(tree, markdown, file);
   const { statement, steps } = splitAtSolution(tree.children, file);
 
   return {
@@ -82,6 +84,7 @@ export async function problemTextToProblem(text: string, file: string, id: strin
     steps: await Promise.all(
       steps.map(async (step) => ({ name: step.name, html: await nodesToHtml(step.nodes) })),
     ),
+    visualNames,
   };
 }
 

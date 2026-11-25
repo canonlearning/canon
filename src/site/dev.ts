@@ -6,13 +6,18 @@
 import { existsSync, readFileSync, statSync, watch } from "node:fs";
 import { createServer, type ServerResponse } from "node:http";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { buildSite } from "./build.ts";
 
 const PORT = 4000;
 
+const ENGINE_SITE_DIR = fileURLToPath(new URL(".", import.meta.url));
+const ENGINE_VISUAL_DIR = fileURLToPath(new URL("../visual", import.meta.url));
+
 const CONTENT_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
   ".woff2": "font/woff2",
 };
 
@@ -35,12 +40,18 @@ export async function startDevServer(courseDir: string): Promise<void> {
   await rebuild();
 
   let pendingRebuild: NodeJS.Timeout | undefined;
-  watch(courseDir, { recursive: true }, (_event, changedFile) => {
-    if (!changedFile || isIgnored(changedFile)) return;
+  const rebuildSoon = () => {
     // An editor can write a file in several steps, so wait a moment.
     clearTimeout(pendingRebuild);
     pendingRebuild = setTimeout(rebuild, 50);
+  };
+  watch(courseDir, { recursive: true }, (_event, changedFile) => {
+    if (changedFile && !isIgnored(changedFile)) rebuildSoon();
   });
+  // The engine's stylesheet and visual code are read fresh on each build,
+  // so a change to them also shows up without a restart.
+  watch(ENGINE_SITE_DIR, rebuildSoon);
+  watch(ENGINE_VISUAL_DIR, rebuildSoon);
 
   const server = createServer((request, response) => {
     const urlPath = decodeURIComponent(new URL(request.url ?? "/", "http://localhost").pathname);

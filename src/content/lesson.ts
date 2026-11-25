@@ -13,6 +13,8 @@ export type Lesson = {
   id: string;
   title: string;
   html: string;
+  // The names of the visuals the lesson places with ::visual.
+  visualNames: string[];
 };
 
 export async function readLesson(courseDir: string, id: string): Promise<Lesson> {
@@ -20,20 +22,20 @@ export async function readLesson(courseDir: string, id: string): Promise<Lesson>
   if (!existsSync(file)) {
     throw new Error(`${file}: not found. course.yaml lists a lesson "${id}".`);
   }
-  const { title, html } = await lessonMarkdownToHtml(readFileSync(file, "utf8"), file);
-  return { id, title, html };
+  const lesson = await lessonMarkdownToHtml(readFileSync(file, "utf8"), file);
+  return { id, ...lesson };
 }
 
 // `file` is used only to name the file in error messages.
 export async function lessonMarkdownToHtml(
   markdown: string,
   file: string,
-): Promise<{ title: string; html: string }> {
+): Promise<{ title: string; html: string; visualNames: string[] }> {
   const tree = parseMarkdown(markdown);
   const title = takeTitle(tree, file);
-  prepareTree(tree, markdown, file);
+  const visualNames = prepareTree(tree, markdown, file);
   const html = await nodesToHtml(tree.children);
-  return { title, html };
+  return { title, html, visualNames };
 }
 
 // The title is removed from the tree because the page template prints it.

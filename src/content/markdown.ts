@@ -26,10 +26,10 @@ export function parseMarkdown(markdown: string): Root {
 }
 
 // `markdown` is the text the tree was parsed from, and `file` names the
-// file in error messages.
-export function prepareTree(tree: Root, markdown: string, file: string): void {
+// file in error messages. Returns the names of the visuals the text uses.
+export function prepareTree(tree: Root, markdown: string, file: string): string[] {
   markDisplayMath(tree, markdown);
-  replaceDirectives(tree, markdown, file);
+  return replaceDirectives(tree, markdown, file);
 }
 
 // Turns a run of nodes from a prepared tree into HTML. Taking nodes and
@@ -61,22 +61,41 @@ function markDisplayMath(tree: Root, markdown: string): void {
 
 // There is one piece of custom syntax so far: a line such as
 //
-//   ::visual{name="diagnostic-test-tree"}
+//   ::visual{name="crowd"}
 //
-// places an interactive visual. Visuals are not built yet, so the line
-// becomes a labeled empty box.
-function replaceDirectives(tree: Root, markdown: string, file: string): void {
+// places an interactive visual. It becomes
+//
+//   <figure class="visual"><visual-crowd></visual-crowd></figure>
+//
+// and the class in the course's visuals/crowd.ts draws inside that
+// element. Anything else on the line is handed to the visual as it is
+// written, so one visual can be used with different numbers:
+//
+//   ::visual{name="tree" probability="1/10"}
+//     -> <visual-tree probability="1/10"></visual-tree>
+//
+// Returns the names of the visuals that were placed.
+function replaceDirectives(tree: Root, markdown: string, file: string): string[] {
+  const visualNames: string[] = [];
+
   visit(tree, (node, index, parent) => {
     if (node.type === "leafDirective" && node.name === "visual") {
       const name = node.attributes?.name;
       if (!name) {
         throw new Error(`${lineOf(file, node)}: ::visual needs a name, as in ::visual{name="..."}.`);
       }
+      if (!/^[a-z][a-z0-9-]*$/.test(name)) {
+        throw new Error(
+          `${lineOf(file, node)}: the visual name "${name}" may hold only lowercase letters, digits, and hyphens.`,
+        );
+      }
+      visualNames.push(name);
+      const { name: _name, ...settings } = node.attributes ?? {};
       node.data = {
-        hName: "div",
-        hProperties: { className: ["visual-placeholder"], "data-visual": name },
+        hName: "figure",
+        hProperties: { className: ["visual"] },
+        hChildren: [{ type: "element", tagName: `visual-${name}`, properties: settings, children: [] }],
       };
-      node.children = [{ type: "text", value: `Visual: ${name}` }];
       return;
     }
 
@@ -91,4 +110,6 @@ function replaceDirectives(tree: Root, markdown: string, file: string): void {
       parent.children[index] = { type: "text", value: original };
     }
   });
+
+  return visualNames;
 }

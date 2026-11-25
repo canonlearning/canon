@@ -8,6 +8,8 @@ import type { Problem } from "../content/problem.ts";
 export type PageOptions = {
   // In dev mode each page reloads itself when the site is rebuilt.
   liveReload: boolean;
+  // Whether the course has visuals, and so a script for the pages to load.
+  hasVisuals: boolean;
 };
 
 // `privateQuizzes` is empty in a build that will be published.
@@ -170,6 +172,7 @@ function layout(pageTitle: string, course: Course, body: string, options: PageOp
   <title>${escapeHtml(pageTitle)}</title>
   <link rel="stylesheet" href="/assets/katex/katex.min.css">
   <link rel="stylesheet" href="/assets/style.css">
+  ${options.hasVisuals ? '<script type="module" src="/assets/visuals.js"></script>' : ""}
 </head>
 <body>
   <header class="site-header">

@@ -22,9 +22,23 @@ test("a table and a blockquote become HTML", async () => {
   expect(lesson.html).toContain("<blockquote>");
 });
 
-test("::visual becomes a labeled placeholder", async () => {
+test("::visual becomes a figure holding the visual's own element", async () => {
   const lesson = await readLesson(exampleCourse, "first-lesson");
-  expect(lesson.html).toContain('<div class="visual-placeholder" data-visual="example-visual">');
+  expect(lesson.html).toContain(
+    '<figure class="visual"><visual-example-visual></visual-example-visual></figure>',
+  );
+  expect(lesson.visualNames).toEqual(["example-visual"]);
+});
+
+test("other settings on a ::visual line are handed to the visual", async () => {
+  const lesson = await lessonMarkdownToHtml('# T\n\n::visual{name="tree" probability="1/10" first-symbol="S"}\n', "lessons/x.md");
+  expect(lesson.html).toContain('<visual-tree probability="1/10" first-symbol="S"></visual-tree>');
+});
+
+test("a visual name with other characters is an error", async () => {
+  await expect(lessonMarkdownToHtml('# T\n\n::visual{name="My Visual"}\n', "lessons/x.md")).rejects.toThrow(
+    'lessons/x.md:3: the visual name "My Visual" may hold only lowercase letters, digits, and hyphens.',
+  );
 });
 
 test("a colon followed by a word stays ordinary text", async () => {

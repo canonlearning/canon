@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { expect, test } from "vitest";
@@ -41,6 +41,25 @@ test("building the example course writes the home page, lesson, quiz, and assets
   expect(existsSync(path.join(outDir, "assets/style.css"))).toBe(true);
   expect(existsSync(path.join(outDir, "assets/katex/katex.min.css"))).toBe(true);
   expect(existsSync(path.join(outDir, "assets/katex/fonts/KaTeX_Main-Regular.woff2"))).toBe(true);
+});
+
+test("the course's visuals are bundled into one script that the pages load", async () => {
+  const outDir = await buildSite(copyOfExampleCourse());
+
+  const script = readFileSync(path.join(outDir, "assets/visuals.js"), "utf8");
+  expect(script).toContain('customElements.define("visual-example-visual"');
+
+  const lesson = readFileSync(path.join(outDir, "lessons/first-lesson/index.html"), "utf8");
+  expect(lesson).toContain('<script type="module" src="/assets/visuals.js"></script>');
+});
+
+test("a lesson that names a visual with no file is an error", async () => {
+  const courseDir = copyOfExampleCourse();
+  rmSync(path.join(courseDir, "visuals"), { recursive: true });
+
+  await expect(buildSite(courseDir)).rejects.toThrow(
+    'first-lesson.md: uses the visual "example-visual", but visuals/example-visual.ts does not exist.',
+  );
 });
 
 test("a build to publish leaves the private quizzes out", async () => {
