@@ -537,6 +537,12 @@ h4 {
     break-after: avoid;
   }
 
+  /* A part of a flat drawing that fades in on the screen is printed as it
+     is. A fade that has not run would print as nothing. */
+  .fig-flat .new {
+    animation: none;
+  }
+
   /* A printed visual is a picture, so its controls are left out. */
   .fig-pause,
   .fig-controls {

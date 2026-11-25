@@ -374,6 +374,10 @@ body.deck main {
   }
 
   .slide-body figure.visual {
+    max-width: 22cm;
+  }
+
+  .slide-body figure.visual:has(.fig-canvas) {
     max-width: 15cm;
   }
 
