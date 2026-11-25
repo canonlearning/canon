@@ -32,10 +32,24 @@ export function prepareTree(tree: Root, markdown: string, file: string): string[
   return replaceDirectives(tree, markdown, file);
 }
 
+// Colors a writer can give to part of a formula, as in $\red{9}$. They are
+// the colors of the visuals (src/visual/palette.ts), so a number in a
+// formula can match the thing it counts in a figure. The color is written
+// with two # signs because a single # starts a macro argument.
+const MATH_COLORS = {
+  "\\red": "\\textcolor{##c0392b}{#1}",
+  "\\blue": "\\textcolor{##3a74b8}{#1}",
+  "\\teal": "\\textcolor{##2f8f83}{#1}",
+  "\\brass": "\\textcolor{##b08d3f}{#1}",
+};
+
 // Turns a run of nodes from a prepared tree into HTML. Taking nodes and
 // not a whole tree lets a problem be cut into its statement and steps.
 export async function nodesToHtml(nodes: RootContent[]): Promise<string> {
-  const toHtml = unified().use(remarkRehype).use(rehypeKatex).use(rehypeStringify);
+  const toHtml = unified()
+    .use(remarkRehype)
+    .use(rehypeKatex, { macros: { ...MATH_COLORS } })
+    .use(rehypeStringify);
   const htmlTree = await toHtml.run({ type: "root", children: nodes });
   return toHtml.stringify(htmlTree);
 }

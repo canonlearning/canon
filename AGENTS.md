@@ -177,13 +177,19 @@ Terms and symbols:
 
 - Define a term in the sentence where it first appears ("we call this set
   the sample space"), then use that one name every time. No synonyms for
-  variety.
+  variety. Put the term in bold in that sentence, and nowhere else.
 - Do not use a term before it is defined, and do not use jargon where an
   ordinary word says the same thing.
 - Introduce each symbol in words beside the formula that first uses it
   ("where $B$ is the event that ..."). After a formula, say in a sentence
   what it states.
 - A formula is part of the sentence around it and is punctuated that way.
+- A calculation with more than one step is stacked, one step per line,
+  aligned at the equals sign (`\begin{aligned}`). A formula that later text
+  refers to gets a number (`\tag{1}`) and is cited as "(1)".
+- A number that a figure shows in a color takes that color in the text and
+  formulas: `$\red{9}$`. The colors are `\red`, `\blue`, `\teal`, and
+  `\brass`, the palette of the visuals. Color a few numbers, not most.
 
 Sentences:
 
