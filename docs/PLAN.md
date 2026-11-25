@@ -132,7 +132,7 @@ traction.
 | Content format | Plain Markdown, plus two directives | Yes |
 | Problem schema | One file per problem, one fixed version, named solution steps | Yes |
 | Visual components | Web Components, D3 or plain SVG | Yes |
-| Site | Own shell on Vite and a Markdown parser | Yes |
+| Site | Own shell: a build script and a Markdown parser, Vite when visuals arrive | Yes |
 | Math and code | KaTeX, build-time highlighting | Yes |
 | Print | HTML + print CSS | Yes |
 | In-class kit | A "present" view of the lesson page | Later, not designed |
@@ -158,7 +158,8 @@ has to earn its place by doing something Markdown cannot. Two do:
   explanation for a reader who wants it. It is built when a lesson first needs
   one.
 
-Everything else is ordinary Markdown. A discussion prompt is a blockquote, and
+Everything else is ordinary Markdown. A lesson's title is its first line,
+written as a `#` heading, and a lesson has no front matter. A discussion prompt is a blockquote, and
 the motivating problem is the opening of the lesson. Practice problems are not
 written into the lesson: `course.yaml` lists them per lesson and the site adds
 them at the end of the page.
@@ -196,7 +197,9 @@ framework change.
 
 ### Site
 
-An own shell, built on Vite and a Markdown parser. If this becomes a product,
+An own shell, built on a Markdown parser. It is a plain build script that
+writes HTML files, because the pages have no browser code yet. Vite comes in
+with the visuals, when there is browser code to bundle. If this becomes a product,
 the engine is what ships, and that needs the control. "Own" means owning the
 shell, not rewriting the bundler or the parser.
 
@@ -239,17 +242,39 @@ what makes "fork the course" and separate licenses work.
 - `problems/`: one file per problem, with named solution steps.
 - `visuals/`: components specific to this course, including the experiment
   simulation.
-- A dependency on the engine at a pinned version, and the deploy config. This
-  repo builds and publishes canonlearning.ai for now.
+- `package.json` with the `dev` and `build` commands. They run the engine
+  from the sibling `../canon` folder for now; a pinned version and the deploy
+  config come when the site is published.
 
 `canonlearning/canon`, the engine (MIT):
 
 - Content core: the parser that turns lesson and problem files into structured
   data.
-- Shell: the Vite build that produces lesson pages and quiz pages.
+- Shell: the build that produces lesson pages and quiz pages.
 - The visual base class and parameter schema, plus any visuals not tied to one
   subject.
 - A small example course for testing.
+
+### How a course gets the engine
+
+For now the course runs the engine from a sibling folder: its `dev` and
+`build` commands call `../canon/src/cli.ts`. That only works on a machine
+with both repositories cloned side by side. It is kept while the author is
+the only one building, because a change to the engine shows up in the course
+at once, with no version to bump.
+
+It changes when the site first goes online, because the automatic build
+needs it too:
+
+- The course's `package.json` names the engine as a dependency at a tagged
+  version, pointing at the `canonlearning/canon` GitHub repository or at an
+  npm package.
+- Someone clones only the course repository and runs `npm install`, which
+  downloads the engine.
+- The engine gains a compile step. Node runs TypeScript directly from a local
+  folder but refuses to for an installed dependency.
+- A teacher with a fork edits files on GitHub and an automatic build
+  publishes the site, so most teachers install nothing.
 
 ### Identity and LMS (deferred)
 

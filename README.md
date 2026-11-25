@@ -4,8 +4,10 @@
 
 Site: [canonlearning.ai](https://canonlearning.ai). This repository is the
 engine. The first course is
-[Probability 1](https://github.com/canonlearning/probability-1). Nothing is
-built yet; the [plan](docs/PLAN.md) has the pilot scope and the tech picks.
+[Probability 1](https://github.com/canonlearning/probability-1). So far the
+engine turns a course's Markdown lessons into static pages with typeset math.
+Problems, printable quizzes, and the interactive visuals are not built. The
+[plan](docs/PLAN.md) has the pilot scope and the tech picks.
 
 ## Premise
 

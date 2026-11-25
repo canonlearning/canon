@@ -1,8 +1,9 @@
 # Canon Learning
 
 The engine behind canonlearning.ai: open courses with interactive visuals, an
-in-class kit, and a problem bank, graded on paper. Nothing is built yet; the
-repository is three documents.
+in-class kit, and a problem bank, graded on paper. Built so far: Markdown
+lessons rendered as static pages with typeset math. Problems, quizzes, and
+visuals are not built; a `::visual` line renders as an empty box.
 
 - The first course is the sibling repository `../probability-1`
   (`canonlearning/probability-1`). Course content goes there: lessons,
@@ -14,6 +15,21 @@ repository is three documents.
 - Code is MIT, here and in the course repository. Course content (lessons,
   problems, solutions) is CC BY 4.0. Do not change either without being
   asked.
+
+## Running
+
+- `npm test` and `npm run typecheck` in this repository.
+- `npm run dev` in `../probability-1` serves the course at
+  `http://localhost:4000` and rebuilds on save. `npm run build` writes the
+  site to `dist/`. Both call `src/cli.ts` here by its sibling path. That is
+  a shortcut for now; `docs/PLAN.md` ("How a course gets the engine") has
+  what replaces it when the site goes online.
+- Node runs the TypeScript directly, so there is no compile step. Imports end
+  in `.ts`, and syntax that needs compiling (enums, parameter properties) is
+  not used.
+
+`src/content/` reads a course folder into data, and `src/site/` turns that
+data into pages. `example/` is a small course for the tests.
 
 ## Documents
 
