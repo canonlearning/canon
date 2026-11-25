@@ -171,15 +171,41 @@ solution in plain Markdown. This is how a teacher already writes a problem, so
 changing one or adding one needs nothing new. There are no variants, no
 placeholders, and no seeds.
 
-- Front matter for metadata (id, topic, difficulty, answer), body for the
-  statement and the solution.
+- Front matter for the title and the answer, body for the statement and the
+  solution. Other keys (topic, difficulty) are allowed and not used yet.
+- On a lesson page the whole solution, steps and answer, is in one box that
+  the student opens. On a quiz page it is in the answer key.
 - The solution is a `## Solution` heading, and each step under it is a
   `###` heading that names the step. No custom syntax.
-- A quiz is a named list of problem ids in `course.yaml`.
+- A quiz is a list of problem ids.
 - Numeric answers are stored exact (a fraction or a closed form), with the
   decimal derived from it.
 - Answers are not always numbers. Diagram problems (draw the tree, shade the
   event) use a figure plus a short marking guide.
+
+### Practice quizzes and graded quizzes
+
+Everything on the site is public, and an answer bank behind a login is ruled
+out, so a published quiz cannot be the graded one.
+
+- **Practice quizzes** belong to lessons. A lesson's `practice_quiz` list in
+  `course.yaml` names the problems on it, and the lesson page ends with a
+  link to print it. They are published with their answer keys. A student
+  prints one, works it on paper, and checks it. They are not listed on the
+  course home page.
+- **Graded quizzes** are the teacher's own and never go on the site. They are
+  listed in `private/quizzes.yaml`, and their problems are in
+  `private/problems/`, in the same file format. Git ignores the `private/`
+  folder. A private quiz may also use public problems.
+- The dev server builds the private quizzes so the teacher can print them.
+  The build that gets published leaves them out.
+- A teacher makes a graded question by copying a public problem into
+  `private/problems/` and changing it. This needs a local copy of the course;
+  it cannot be done from GitHub's web editor.
+
+The cost is that the course does not hand a teacher a ready graded quiz. If
+teachers say writing their own is too much work, that is when variants or
+generated numbers are reconsidered.
 
 ### Visual components
 

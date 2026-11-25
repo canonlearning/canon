@@ -98,6 +98,8 @@ schools, and funders.
 
 What this rules out:
 
-- An exam or answer bank behind a paywall or an instructor login.
+- An exam or answer bank behind a paywall or an instructor login. The
+  published quizzes are practice, with public answer keys. A teacher's graded
+  quiz is the teacher's own and stays off the site.
 - A non-commercial content license with paid commercial terms.
 - A school layer that is closed, or sold on being hard to leave.

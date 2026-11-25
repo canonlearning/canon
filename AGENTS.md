@@ -1,9 +1,9 @@
 # Canon Learning
 
 The engine behind canonlearning.ai: open courses with interactive visuals, an
-in-class kit, and a problem bank, graded on paper. Built so far: Markdown
-lessons rendered as static pages with typeset math. Problems, quizzes, and
-visuals are not built; a `::visual` line renders as an empty box.
+in-class kit, and a problem bank, graded on paper. Built so far: static pages with typeset math for lessons, practice problems
+with step-by-step solutions, and printable quizzes with an answer key.
+Visuals are not built; a `::visual` line renders as an empty box.
 
 - The first course is the sibling repository `../probability-1`
   (`canonlearning/probability-1`). Course content goes there: lessons,
@@ -93,6 +93,10 @@ everything else.
   without knowing a framework. Numeric answers are stored exact.
 - An LLM may draft a visual or a problem. A person verifies each one before
   it ships, and every problem and its solution is hand-checked.
+- Everything published is public, answer keys included, so a published quiz
+  is a practice quiz. A graded quiz is the teacher's own: it lives in the
+  course's `private/` folder, which git ignores, and only the dev server
+  builds it. `npm run build` must never write a private quiz or problem.
 - No problem variants, placeholders, or quiz seeds in v1. They are added
   later only if the teachers writing quizzes ask for them.
 

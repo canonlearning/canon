@@ -55,7 +55,8 @@ main {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   line-height: 1.2;
   text-wrap: balance;
 }
@@ -152,13 +153,147 @@ tr + tr td {
   color: var(--muted);
 }
 
-.lesson-list {
+.link-list {
   padding-left: 1.4rem;
   font-size: 1.1rem;
+}
+
+h3 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+h4 {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 1rem;
+}
+
+/* Practice problems at the end of a lesson. The solution is one box that
+   opens. */
+.practice {
+  margin-top: 4rem;
+  padding-top: 0.5rem;
+  border-top: 1.5px solid var(--text);
+}
+
+.problem details {
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.problem summary {
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.problem details[open] summary {
+  border-bottom: 1px solid var(--rule);
+}
+
+.problem details > :not(summary) {
+  margin-left: 0.9rem;
+  margin-right: 0.9rem;
+}
+
+.problem details > :nth-child(2) {
+  margin-top: 1rem;
+}
+
+.problem details > :last-child {
+  margin-bottom: 1rem;
+}
+
+/* The link to the practice quiz, at the end of a lesson. */
+.quiz-link {
+  margin-top: 2rem;
+}
+
+/* The quiz page, on screen. */
+.print-note {
+  padding: 0.6rem 0.9rem;
+  background: var(--tint);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.quiz-name-line span {
+  display: inline-block;
+  width: 16rem;
+  border-bottom: 1px solid var(--text);
+}
+
+.quiz ol,
+.answer-key ol {
+  padding-left: 1.4rem;
+}
+
+.quiz-question,
+.key-entry {
+  margin-bottom: 1.5rem;
+}
+
+.working-space {
+  height: 14rem;
+}
+
+.answer p {
+  display: inline;
+}
+
+.answer-key {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1.5px dashed var(--rule);
 }
 
 @media (max-width: 30rem) {
   html {
     font-size: 16px;
+  }
+}
+
+/* Printing. Used for quizzes: black on white, no site header, and the
+   answer key on a new sheet. */
+@media print {
+  @page {
+    margin: 2cm;
+  }
+
+  html {
+    font-size: 11pt;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .site-header,
+  .print-note {
+    display: none;
+  }
+
+  main {
+    max-width: none;
+    padding: 0;
+  }
+
+  .quiz-question,
+  .key-entry {
+    break-inside: avoid;
+  }
+
+  .working-space {
+    height: 8cm;
+  }
+
+  .answer-key {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    break-before: page;
   }
 }

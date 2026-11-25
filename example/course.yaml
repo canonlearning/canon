@@ -1,6 +1,10 @@
-# A small course used by the tests. It covers each thing a lesson can hold.
+# A small course used by the tests. It covers each thing a course can hold.
 title: Example Course
 description: A course for testing the engine.
 
 lessons:
   - id: first-lesson
+    problems:
+      - coin-flips
+    practice_quiz:
+      - coin-flips

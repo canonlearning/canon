@@ -5,8 +5,10 @@
 Site: [canonlearning.ai](https://canonlearning.ai). This repository is the
 engine. The first course is
 [Probability 1](https://github.com/canonlearning/probability-1). So far the
-engine turns a course's Markdown lessons into static pages with typeset math.
-Problems, printable quizzes, and the interactive visuals are not built. The
+engine turns a course's Markdown files into static pages with typeset math:
+lessons, practice problems with step-by-step solutions, and quizzes that
+print with an answer key (published practice quizzes, and a teacher's private
+graded ones). The interactive visuals are not built. The
 [plan](docs/PLAN.md) has the pilot scope and the tech picks.
 
 ## Premise
@@ -58,8 +60,9 @@ not started and will not be until people are using the course.
 
 - **Homework is ungraded practice, done by hand.** Any take-home problem can be
   done by an LLM, so it is not a measure.
-- **Grades come from short in-class paper quizzes.** The platform prints
-  quizzes and problem sets from the bank.
+- **Grades come from short in-class paper quizzes.** The published quizzes
+  are for practice, since their answer keys are public. A teacher writes the
+  graded quiz and keeps it private, and the platform prints both.
 - **Content is forkable.** Lessons are Markdown, so teachers can reorder, cut,
   and add examples.
 - **LLMs help the author freely.** Visuals are drafted with an LLM and verified
