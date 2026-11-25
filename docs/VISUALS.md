@@ -107,6 +107,20 @@ export default class Crowd extends Visual {
 - `build` is called when the visual first comes near the screen, not when
   the page loads. A visual in a closed solution starts when the solution is
   opened, so its animation begins at its first step.
+- A visual that goes through steps keeps its time on
+  `figure.timeline([0, 3, 6])`, a list of when each step starts, and reads
+  the time with `timeline.advance(seconds)` in `onFrame`. On a lesson page
+  the time runs on. On a lecture slide it stops at the end of each step
+  until the teacher presses an arrow key. `evenSteps(count, seconds)` makes
+  the list for steps of equal length.
+- A visual for a lecture slide is a flat drawing, not a 3D scene:
+  `figure.flatBox()` gives a plain box in place of the canvas, and
+  `figure.steps(count, show)` calls `show(step)` to write the drawing as one
+  SVG string (`svg`, `textAt`, `stackedFraction`, and the colors `ink`, in
+  `drawing.ts`). A part marked `isNew` fades in. The deck's arrow keys move
+  through the steps, and anywhere else the figure has Back and Next
+  buttons. A flat drawing is 1600 by 780 units, the shape of a slide under
+  its headline, with type of 30 units or more.
 - The numbers a visual shows are constants at the top of its file. A visual
   that is reused with different numbers reads them from its `::visual` line
   with `this.getAttribute("probability")`; anything on the line besides

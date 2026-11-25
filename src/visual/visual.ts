@@ -52,6 +52,21 @@ export abstract class Visual extends HTMLElement {
     this.figure = undefined;
   }
 
+  // A slide deck calls these when the teacher presses an arrow key. Each
+  // returns false when the visual has no step to move to, and the deck
+  // then moves to another slide.
+  nextStep(): boolean {
+    return this.figure?.nextStep() ?? false;
+  }
+
+  previousStep(): boolean {
+    return this.figure?.previousStep() ?? false;
+  }
+
+  stepPosition(): { step: number; count: number } | undefined {
+    return this.figure?.stepPosition();
+  }
+
   private start(): void {
     if (this.figure) return;
     this.figure = new Figure(this);

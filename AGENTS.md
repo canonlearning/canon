@@ -3,7 +3,8 @@
 The engine behind canonlearning.ai: open courses with interactive visuals, an
 in-class kit, and a problem bank, graded on paper. Built so far: static
 pages for lessons with typeset math and interactive visuals, practice
-problems with worked solutions. The in-class kit is not built.
+problems with worked solutions, and lecture slide decks. Each deck is one
+HTML file.
 
 - The first course is the sibling repository `../probability-1`
   (`canonlearning/probability-1`). Course content goes there: lessons,
@@ -29,7 +30,8 @@ problems with worked solutions. The in-class kit is not built.
   not used.
 
 `src/content/` reads a course folder into data, and `src/site/` turns that
-data into pages and bundles the course's visuals with esbuild. `src/visual/`
+data into pages and lecture decks and bundles the course's visuals with
+esbuild. `src/visual/`
 runs in the browser: the base class, the figure frame, and the three.js stage
 that a course's visuals import as `"canon"`. `example/` is a small course for
 the tests.
@@ -113,6 +115,25 @@ everything else.
   graded quiz is the teacher's own, written outside the course by changing
   the published problems. Do not add quiz pages or a private content folder.
 - No problem variants, placeholders, or seeds in v1.
+
+## Designing something new
+
+These apply to anything with a look of its own that the engine does not
+build yet (a deck, a handout, a new kind of page).
+
+- Design it for its own use and its own reader. It does not take the
+  lesson page's style, layout, text, or visuals unless that is asked for.
+  The lesson is described here in the most detail, so it is the easiest
+  thing to copy, and copying it is the usual mistake.
+- Show the look before building it. Make two or three static mock-ups of
+  a few representative pages, in a scratch file, and get a pick before
+  changing the engine. Revise the picked mock-up until it is approved.
+- It is not done until it has been used from start to finish in a browser
+  and reviewed as a third party who has not seen the lesson: every page,
+  every step, at the size it will be shown. Report what is rough, in order
+  of how much it hurts, and not only what works.
+- A check that nothing overflows and that the tests pass says it runs. It
+  does not say it is good.
 
 ## Writing
 
@@ -214,6 +235,66 @@ Where lessons depart from the paper, which is written for researchers:
   at its start are its label (`> **On paper** Draw the tree.`). It can hold
   a task to do on paper, a warning, or a side note. A callout holds real
   content; it is not there to make the text feel interactive.
+
+## Lecture decks
+
+A deck in a course's `lectures/` folder is the slides for teaching one
+lesson. It is Markdown in the lesson format, and a line of `---` starts a
+new slide. What is on a slide decides how it is laid out:
+
+| Written on the slide | Shown as |
+|---|---|
+| `# Heading` | The title slide, or a slide that ends a part ("Part 1 is done") |
+| `## Heading` first | The headline, one slim line along the top |
+| A `::visual` line | A drawing that fills the slide and is stepped with the arrow keys |
+| A bulleted list | Points that appear one per key press |
+| A numbered list | The choices A, B, C, D of a question for a vote |
+| A callout with a formula | A definition or rule, centered |
+| `\begin{aligned}` formula | A calculation shown one line per key press |
+| A sentence with no headline | A takeaway, set large |
+| A callout labeled `**Notes**` | The teacher's notes, which the room does not see |
+
+- A lesson has one deck. A lesson that takes more than one class has a
+  slide that ends each part, not a deck for each class.
+- A deck does not look like the reading page: it is white and sans-serif,
+  with ordinary font weights and a slim headline. Do not make headlines
+  heavy or tall.
+- A deck is not the lesson cut into slides, in content or in looks. Do not
+  copy the lesson's sentences, its formulas in sequence, its example, or
+  its visuals. A deck uses different examples, so that the reading is a
+  second pass over the same idea. It may point to the lesson ("this is (1)
+  in the reading").
+- A deck has its own drawings: flat SVG visuals with large type and few
+  colors, made for a slide (`figure.flatBox` and `figure.steps`; see
+  `docs/VISUALS.md`). Do not put a lesson's 3D visual on a slide.
+- A deck goes further into each idea than the lesson and walks through it:
+  every drawing and calculation is built up one key press at a time, and
+  each step of a drawing has a one-line caption.
+- A slide shows little prose, in type large enough for the back of a room.
+  What the teacher says goes in the notes.
+- Plain numbers in a list are plain text. Math is for symbols and
+  formulas.
+- Each idea runs in this order: the facts of the case, a vote, a task on
+  paper, the drawing walked through, the calculation one line at a time,
+  then the result in one sentence. A vote does not come before the room
+  has the facts it is about.
+- One result is not restated on more than two slides in a row.
+- A task for the room is a callout labeled `**On paper**`. Its notes give
+  the time to allow and the common wrong answer.
+- The notes of a visual's slide say what each step shows, in order.
+- The first slide's notes say which lesson the deck is for, what it uses in
+  place of the lesson's example, and how the time is split.
+- Real data on a slide is checked against its source, and the notes name
+  the source.
+- A slide that does not fit the screen has too much on it. Split it.
+- A slide is read from the back of a room. In a flat drawing (1600 by 780
+  units) no text is smaller than 30 units, and the drawing uses most of
+  that space. Text and choices on a slide are about twice the size of the
+  text on a lesson page.
+- The slide shows nothing that is only for the teacher: no key hints, and
+  no buttons that do nothing while the teacher is stepping.
+- Before a deck is called done, walk it at 1280 by 720: every slide and
+  every key press, forward and back (see "Designing something new").
 
 ## Commits
 

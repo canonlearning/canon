@@ -7,8 +7,8 @@ engine. The first course is
 [Probability 1](https://github.com/canonlearning/probability-1). So far the
 engine turns a course folder into a static site: Markdown lessons with
 typeset math and interactive visuals drawn with three.js, practice problems
-with worked solutions. One lesson with two
-visuals exists. The in-class kit is not built. The
+with worked solutions, and lecture slide decks, each built from Markdown into
+one HTML file. One lesson exists, with five problems and two decks. The
 [plan](docs/PLAN.md) has the pilot scope and the tech picks.
 
 ## Premise

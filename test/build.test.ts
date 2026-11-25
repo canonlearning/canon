@@ -20,10 +20,14 @@ test("building the example course writes the home page, lesson, and assets", asy
 
   const home = readFileSync(path.join(outDir, "index.html"), "utf8");
   expect(home).toContain('<a href="/lessons/first-lesson/">The first lesson</a>');
+  expect(home).toContain(': <span class="lesson-summary">A lesson for the tests.</span>');
   expect(home).not.toContain("quiz");
 
   const lesson = readFileSync(path.join(outDir, "lessons/first-lesson/index.html"), "utf8");
   expect(lesson).toContain("<h1>The first lesson</h1>");
+  expect(lesson).toContain('href="/lectures/first-lecture.html"');
+  expect(lesson).toContain('href="https://example.org/course/blob/main/lectures/first-lecture.md"');
+  expect(lesson).toContain('href="https://example.org/course/blob/main/lessons/first-lesson.md"');
   expect(lesson).toContain("<h3>Two heads</h3>");
   expect(lesson.match(/<details>/g)).toHaveLength(1);
   expect(lesson).toContain("<summary>Solution</summary>");
@@ -46,6 +50,22 @@ test("the course's visuals are bundled into one script that the pages load", asy
   expect(lesson).toContain('<script type="module" src="/assets/visuals.js"></script>');
 });
 
+test("a lecture deck is one file that holds its styles, fonts, and scripts", async () => {
+  const outDir = await buildSite(copyOfExampleCourse());
+
+  const home = readFileSync(path.join(outDir, "index.html"), "utf8");
+
+
+  const deck = readFileSync(path.join(outDir, "lectures/first-lecture.html"), "utf8");
+  expect(deck.match(/<section class="slide">/g)).toHaveLength(3);
+  // Nothing is loaded from another file.
+  expect(deck).not.toContain("<link");
+  expect(deck).not.toMatch(/<script[^>]* src=/);
+  expect(deck).not.toContain("url(fonts/");
+  expect(deck).toContain("url(data:font/woff2;base64,");
+  expect(deck).toContain('customElements.define("visual-example-visual"');
+});
+
 test("a lesson that names a visual with no file is an error", async () => {
   const courseDir = copyOfExampleCourse();
   rmSync(path.join(courseDir, "visuals"), { recursive: true });
@@ -58,7 +78,7 @@ test("a lesson that names a visual with no file is an error", async () => {
 test("the manifest lists the problems for each lesson", () => {
   const course = readCourse(exampleCourse);
   expect(course.lessons).toEqual([
-    { id: "first-lesson", problemIds: ["coin-flips"] },
+    { id: "first-lesson", summary: "A lesson for the tests.", problemIds: ["coin-flips"], lectureIds: ["first-lecture"] },
   ]);
 });
 

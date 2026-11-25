@@ -215,6 +215,28 @@ figure.visual > :empty {
   color: #2a2a2e;
 }
 
+/* A flat drawing: an SVG as wide as its box. A part marked "new" was
+   added by the current step, and fades in. */
+.fig-flat {
+  font-family: var(--sans);
+}
+
+.fig-flat svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fig-flat .new {
+  animation: fig-appear 0.45s ease-out;
+}
+
+@keyframes fig-appear {
+  from {
+    opacity: 0;
+  }
+}
+
 /* The still image of the canvas, shown only on a printed page. */
 .fig-print {
   display: none;
@@ -354,7 +376,45 @@ figure.visual > :empty {
   color: var(--muted);
 }
 
-.link-list {
+/* The line of links under a lesson's title: small, gray, each with an
+   icon. It is for a teacher, so it stays out of a student's way. */
+.lesson-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.4rem;
+  margin: -1.3rem 0 2.2rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+}
+
+.lesson-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.lesson-links a:hover {
+  color: var(--link);
+}
+
+.lesson-links svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The list of lessons: one line for each, with its summary in gray. */
+.lesson-summary {
+  color: var(--muted);
+}
+
+.lesson-list {
   padding-left: 1.4rem;
   font-size: 1.1rem;
 }
@@ -459,7 +519,8 @@ h4 {
     color: #000;
   }
 
-  .site-header {
+  .site-header,
+  .lesson-links {
     display: none;
   }
 

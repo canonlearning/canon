@@ -1,8 +1,12 @@
 # A small course used by the tests. It covers each thing a course can hold.
 title: Example Course
 description: A course for testing the engine.
+source: https://example.org/course/blob/main
 
 lessons:
   - id: first-lesson
+    summary: A lesson for the tests.
     problems:
       - coin-flips
+    lectures:
+      - first-lecture

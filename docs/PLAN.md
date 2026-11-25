@@ -33,8 +33,8 @@ problem may have several answers. Problems on base rates with three causes, a
 negative result, or a second test wait for the lesson on Bayes' rule, and
 problems on independence for that lesson.
 
-The in-class kit is next: a Markdown slide deck for each lecture, built by
-the engine with the same visuals (see "In-class kit" below).
+The lesson has one lecture deck, in two parts for two classes, built by the
+engine from Markdown with the same visuals (see "In-class kit" below).
 
 Visuals are styled after the figures on gtcloudrobotics.com; see
 [VISUALS.md](VISUALS.md).
@@ -124,8 +124,7 @@ times and compare the frequencies against the computed answer.
 - Authoring tools for non-technical teachers
 - Quizzes, and problem variants. The course publishes practice problems and
   no quizzes, and each problem has one fixed version.
-- The in-class kit: a Markdown slide deck for each lecture, and a
-  full-screen page for each visual. It waits until the lessons exist.
+- A full-screen page for each visual, and versioned addresses.
 - Any LLM at runtime
 - Any backend or database
 - The school layer: accounts, class codes, grades, student tracking
@@ -156,7 +155,7 @@ traction.
 | Site | Own shell: a build script, a Markdown parser, and esbuild for the visuals | Yes |
 | Math and code | KaTeX, build-time highlighting | Yes |
 | Print | HTML + print CSS | Yes |
-| In-class kit | Markdown slide decks built by the engine, one HTML file each | Later |
+| In-class kit | Markdown slide decks built by the engine, one HTML file each | Yes |
 | Language and repos | TypeScript throughout, two repos | Yes |
 | Identity and LMS | Standalone LMS; class code, then school sign-on | Deferred, school layer |
 
@@ -284,21 +283,48 @@ last step.
 
 ### In-class kit
 
-Not built. A lesson page is the reading for one or two lectures, and it is
+Lecture decks are built. Full-screen pages for the visuals and versioned
+addresses are not. A lesson page is the reading for one or two lectures, and it is
 not shown in class: a lecture runs in a different order (pose the question,
 let the room answer, run the visual, work on paper, show the result), so a
 "present" view of the lesson page is ruled out. The lesson is the fixed
-reference. The slide deck is the teacher's own and changes with each
-teacher.
+reference. The course publishes its own deck for each lesson. Under its
+title, a lesson page links to its slides and to the Markdown files of the
+slides and of the page (from `source` in `course.yaml`). A teacher who
+wants different slides copies the deck's Markdown file in a fork and
+changes it.
 
-A deck is a Markdown file, one per lecture, in the course's `lectures/`
-folder. The engine turns it into slides. No external slide tool is used;
+A deck is a Markdown file, one per lesson, in the course's `lectures/`
+folder, listed under its lesson in `course.yaml`. The engine turns it into
+slides, and the course home page links to it. No external slide tool is used;
 Marp, Slidev, and reveal.js are references for how Markdown slides behave.
 
-- **The format is the lesson format.** A line of `---` starts a new slide. A
-  slide holds a heading and a sentence, a formula, or a `::visual` line,
-  which fills the screen with the live visual. Notes for the teacher go
-  under a slide and are not shown to the room. A deck with its notes is also
+- **A deck is led by visuals and uses new examples.** It does not repeat
+  the lesson's text or its example: the lesson works a test for a
+  condition, and its deck uses the Titanic's passengers, two dice, a
+  late bus, and two students called on in turn. A lesson that takes two
+  classes has one deck, with a slide that ends the first part. What the
+  teacher says is in the notes.
+- **A deck has its own look.** It is white and sans-serif with a slim
+  headline, not the serif reading column of a lesson page. What is written
+  on a slide decides its layout: a visual fills the slide, a list shows its
+  points one at a time, a numbered list is the choices of a vote, a
+  callout with a formula is a definition, a sentence with no headline is a
+  takeaway, and a `# Heading` is a title or the end of a part.
+- **A slide is built up one key press at a time.** A drawing moves one
+  step, the points of a list appear one at a time, and a stacked
+  calculation (`\begin{aligned}`) appears one line at a time. A row of dots
+  at the bottom shows how many presses the slide has left.
+- **A deck has its own drawings.** They are flat SVG visuals with large
+  type, not the 3D visuals of the lesson page: a table of counts, a grid of
+  outcomes, and a tree, each walked through with a caption at every step.
+- **The teacher steps a visual.** On a lesson page a visual runs by itself.
+  On a slide it waits at each step, and the arrow keys that change the slide
+  move it forward or back a step first. A visual is written once, as a
+  function of time, and its clock (`figure.timeline`) does the waiting.
+- **The format is the lesson format.** The first line is the title. A line
+  of `---` starts a new slide. Notes for the teacher are a callout labeled `**Notes**`; they are
+  not shown to the room until the N key is pressed. No syntax is added. A deck with its notes is also
   the outline of the lecture: the opening question, the steps in order, the
   task on paper, one problem to work in class.
 - **Markdown, because a teacher changes a deck with an LLM.** One text file
@@ -306,11 +332,14 @@ Marp, Slidev, and reveal.js are references for how Markdown slides behave.
   example, and the change shows as a diff. A slide file (PowerPoint, Google
   Slides) does not survive that, and it can hold only a picture of a visual.
 - **The output is one file.** The build writes each deck as a single HTML
-  file that holds everything it needs. It opens with no network, fills the
-  screen, and moves with the arrow keys. It prints to PDF with each visual
-  as a still picture, for a handout or for a teacher who wants a fixed copy.
+  file that holds everything it needs (styles, math fonts, scripts). It
+  opens with no network, fills the screen with the F key, and moves with the
+  arrow keys. It prints one slide to a page, with each visual as a still
+  picture and the notes under each slide, for a handout or a fixed copy.
+  A deck with visuals is about 1 MB, most of it three.js.
 - **A full-screen page for each visual,** at its own address, showing only
   the figure and its controls, for a teacher who presents from another tool.
+  Not built.
 - **The look comes from one theme.** A deck has no layout controls. A
   teacher who wants free layout uses the PDF or another tool with the
   full-screen visual pages.
@@ -318,9 +347,9 @@ Marp, Slidev, and reveal.js are references for how Markdown slides behave.
 A teacher needs Node to build a deck, as for the rest of the course. Building
 a changed deck without installing anything is not worked out.
 
-A lesson and its visuals are the fixed reference, so their addresses carry a
-version. A deck made one year still opens what it pointed to after a lesson
-or a visual is revised.
+A lesson and its visuals are the fixed reference, so their addresses are to
+carry a version, so that a deck made one year still opens what it pointed to
+after a lesson or a visual is revised. Not built.
 
 ### Language and repos
 
@@ -333,7 +362,7 @@ what makes "fork the course" and separate licenses work.
 - `course.yaml`: the manifest listing lessons and their problems in order, with stable IDs that are never reused.
 - `lessons/`: one Markdown file per section.
 - `problems/`: one file per problem, with named solution steps.
-- `lectures/`: one Markdown slide deck per lecture. Not built.
+- `lectures/`: one Markdown slide deck per lesson.
 - `visuals/`: one TypeScript file per visual.
 - `package.json` with the `dev` and `build` commands. They run the engine
   from the sibling `../canon` folder for now; a pinned version and the deploy

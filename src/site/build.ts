@@ -2,15 +2,18 @@
 //
 //   dist/index.html                 the course home page
 //   dist/lessons/<id>/index.html    one page per lesson
+//   dist/lectures/<id>.html         one file per lecture deck
 //   dist/assets/                    the stylesheet, the math fonts, and the
 //                                   script that draws the visuals
 
-import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readCourse } from "../content/course.ts";
+import { readLecture } from "../content/lecture.ts";
 import { readLesson, type Lesson } from "../content/lesson.ts";
 import { readProblem, type Problem } from "../content/problem.ts";
+import { deckPage } from "./deck.ts";
 import { homePage, lessonPage, type PageOptions } from "./page.ts";
 import { bundleVisuals, listVisuals } from "./visuals.ts";
 
@@ -26,9 +29,15 @@ export async function buildSite(
   const course = readCourse(courseDir);
   const lessons = await Promise.all(course.lessons.map((entry) => readLesson(courseDir, entry.id)));
 
+  const lectureIds = course.lessons.flatMap((entry) => entry.lectureIds);
+  const lectures = await Promise.all(lectureIds.map((id) => readLecture(courseDir, id)));
+
   const visualNames = listVisuals(courseDir);
   for (const lesson of lessons) {
     checkVisualsExist(path.join(courseDir, "lessons", `${lesson.id}.md`), lesson.visualNames, visualNames);
+  }
+  for (const lecture of lectures) {
+    checkVisualsExist(path.join(courseDir, "lectures", `${lecture.id}.md`), lecture.visualNames, visualNames);
   }
   const options: PageOptions = {
     liveReload: buildOptions.liveReload,
@@ -48,10 +57,20 @@ export async function buildSite(
   }
 
   copyAssets(path.join(outDir, "assets"));
+  const visualsFile = path.join(outDir, "assets", "visuals.js");
   if (visualNames.length > 0) {
     // The dev server builds with liveReload, and leaves the script readable.
     const minify = !buildOptions.liveReload;
-    await bundleVisuals(courseDir, visualNames, path.join(outDir, "assets", "visuals.js"), { minify });
+    await bundleVisuals(courseDir, visualNames, visualsFile, { minify });
+  }
+
+  // A deck holds its own copy of the visuals script, so it comes last.
+  for (const lecture of lectures) {
+    const html = deckPage(course, lecture, {
+      liveReload: buildOptions.liveReload,
+      visualsScript: lecture.visualNames.length > 0 ? readFileSync(visualsFile, "utf8") : undefined,
+    });
+    writePage(path.join(outDir, "lectures", `${lecture.id}.html`), html);
   }
   return outDir;
 }
