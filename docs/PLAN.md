@@ -11,9 +11,8 @@ One thin slice, which is also the definition of done for the shell timebox:
 1. One lesson (conditional probability) with the experiment simulation as its
    visual.
 2. One Bayes' rule problem with a three-step solution.
-3. One printed quiz with an answer key.
 
-All three are built. The lesson is built around two visuals. In the crowd, 1000
+Both are built. The lesson is built around two visuals. In the crowd, 1000
 balls, one per person, arrive one after another, pass the test, and land on
 four stacks by test result and condition. The share of positive tests that
 belong to people with the condition settles as they arrive. A slider changes
@@ -25,6 +24,14 @@ The text says only what the visuals cannot: the definition, the
 multiplication rule, and the link from the picture to the formula. The prompts
 and the practice problem ask for work on paper (write down the counts, draw
 the tree), not only a number.
+
+The lesson ends with five practice problems, one for each skill it teaches,
+in the order the lesson takes: count the outcomes of two dice, read a two-way
+table ("and" against "given"), compare two given events that sound alike,
+multiply along a tree whose branches change, and read a tree in reverse. A
+problem may have several answers. Problems on base rates with three causes, a
+negative result, or a second test wait for the lesson on Bayes' rule, and
+problems on independence for that lesson.
 
 A full-screen view of the visuals is most of an in-class kit, so the teacher's
 part is the next thing to reconsider.
@@ -100,7 +107,6 @@ times and compare the frequencies against the computed answer.
 
 - 4 to 6 lessons in Markdown with visuals
 - Problem set with authored step-by-step solutions for each lesson
-- Quiz bank and printable quiz pages
 - Reusable, parameterized visual components (the start of a library)
 
 ### Test
@@ -116,9 +122,8 @@ times and compare the frequencies against the computed answer.
 - The rest of Probability 1 (random variables onward)
 - Students writing their own simulations in code
 - Authoring tools for non-technical teachers
-- Problem variants and randomized quizzes. Each problem has one fixed
-  version. Variants are added later only if the teachers writing quizzes ask
-  for them.
+- Quizzes, and problem variants. The course publishes practice problems and
+  no quizzes, and each problem has one fixed version.
 - The in-class kit and its present view. What a teacher needs on screen in
   class is not worked out yet, so it waits until the lessons exist.
 - Any LLM at runtime
@@ -190,38 +195,27 @@ placeholders, and no seeds.
 - Front matter for the title and the answer, body for the statement and the
   solution. Other keys (topic, difficulty) are allowed and not used yet.
 - On a lesson page the whole solution, steps and answer, is in one box that
-  the student opens. On a quiz page it is in the answer key.
+  the student opens.
 - The solution is a `## Solution` heading, and each step under it is a
   `###` heading that names the step. No custom syntax.
-- A quiz is a list of problem ids.
 - Numeric answers are stored exact (a fraction or a closed form), with the
   decimal derived from it.
 - Answers are not always numbers. Diagram problems (draw the tree, shade the
   event) use a figure plus a short marking guide.
 
-### Practice quizzes and graded quizzes
+### Quizzes
 
-Everything on the site is public, and an answer bank behind a login is ruled
-out, so a published quiz cannot be the graded one.
+The course publishes no quizzes, and the engine builds none. Everything on
+the site is public, and an answer bank behind a login is ruled out, so a
+published quiz cannot be the graded one, and a published practice quiz would
+repeat the practice problems on another page.
 
-- **Practice quizzes** belong to lessons. A lesson's `practice_quiz` list in
-  `course.yaml` names the problems on it, and the lesson page ends with a
-  link to print it. They are published with their answer keys. A student
-  prints one, works it on paper, and checks it. They are not listed on the
-  course home page.
-- **Graded quizzes** are the teacher's own and never go on the site. They are
-  listed in `private/quizzes.yaml`, and their problems are in
-  `private/problems/`, in the same file format. Git ignores the `private/`
-  folder. A private quiz may also use public problems.
-- The dev server builds the private quizzes so the teacher can print them.
-  The build that gets published leaves them out.
-- A teacher makes a graded question by copying a public problem into
-  `private/problems/` and changing it. This needs a local copy of the course;
-  it cannot be done from GitHub's web editor.
-
-The cost is that the course does not hand a teacher a ready graded quiz. If
-teachers say writing their own is too much work, that is when variants or
-generated numbers are reconsidered.
+- A lesson's practice problems, with their worked solutions, are the
+  practice.
+- A graded quiz is the teacher's own. The teacher writes it by changing the
+  published problems into new ones, outside the course.
+- Making practice problems or quizzes on request is revisited with an LLM
+  integration, which is out of scope for v1.
 
 ### Visual components
 
@@ -243,8 +237,17 @@ framework change.
 - A problem may place a visual in its solution. It shows the work in a
   different form from the lesson (the lesson builds a tree, and the
   solution shows the same products as areas of a square), so the student
-  checks a hand-drawn tree against a second picture and not a copy. On a printed quiz it appears in the answer key as a
-  still picture of its last step.
+  checks a hand-drawn tree against a second picture and not a copy. On a
+  printed lesson it is a still picture of its last step.
+- A visual starts when it first comes near the screen, and a visual in a
+  closed solution starts when the solution is opened. A page with many
+  problems would otherwise open a 3D drawing for each at load, and a browser
+  allows a limited number. A visual that has scrolled far away is not
+  released; that is added when a page holds more visuals than a browser
+  allows.
+- The course's reusable visuals so far: a probability tree and an area
+  square (two events in steps), a grid of equally likely outcomes (dice),
+  and a two-way table of counts filled with balls.
 - A shared experiment simulation (a seeded sampler that runs an experiment
   many times and reports frequencies) is not built. The crowd visual shows
   exact shares in a random arrival order, not random draws. It is built when a lesson needs to show
@@ -260,9 +263,9 @@ the engine is what ships, and that needs the control. "Own" means owning the
 shell, not rewriting the bundler or the parser.
 
 - **Content core:** a library that parses lessons and problem files into
-  structured data. Lesson pages and quiz pages read from it. This is the
+  structured data. Lesson pages read from it. This is the
   platform.
-- **Shell:** turns that data into pages. Two page types (lesson, quiz). Thin and replaceable.
+- **Shell:** turns that data into pages. Two page types (home, lesson). Thin and replaceable.
 - Timebox the first version to about a week. If it slips, fall back to an
   existing generator; the core and the components carry over.
 
@@ -274,10 +277,10 @@ highlighting script ships to the browser.
 
 ### Print
 
-HTML + print CSS, printed from the teacher's own browser. A quiz is a page at a
-URL; the teacher presses print. No PDF toolchain, no server, and
-math and figures render exactly as on the web. The answer key prints on a
-separate page.
+HTML + print CSS, printed from the reader's own browser. A lesson is a page
+at a URL; the reader presses print. No PDF toolchain, no server, and math
+renders exactly as on the web. A visual prints as a still picture of its
+last step.
 
 ### In-class kit
 
@@ -292,8 +295,7 @@ what makes "fork the course" and separate licenses work.
 
 `canonlearning/probability-1`, the course (content CC BY 4.0, code MIT):
 
-- `course.yaml`: the manifest listing lessons, problems, and quizzes in
-  order, with stable IDs that are never reused.
+- `course.yaml`: the manifest listing lessons and their problems in order, with stable IDs that are never reused.
 - `lessons/`: one Markdown file per section.
 - `problems/`: one file per problem, with named solution steps.
 - `visuals/`: one TypeScript file per visual.
@@ -305,7 +307,7 @@ what makes "fork the course" and separate licenses work.
 
 - Content core: the parser that turns lesson and problem files into structured
   data.
-- Shell: the build that produces lesson pages and quiz pages.
+- Shell: the build that produces the pages.
 - The visual base class, the figure frame, and the three.js stage.
 - A small example course for testing.
 
@@ -341,10 +343,10 @@ auth of its own at any stage. The course layer never stores student data.
 
 - **The own shell** is the pick most likely to eat pilot time. Hold the
   timebox.
-- **One fixed version per problem** means everyone in a room gets the same
-  quiz. Put it in front of the teachers writing quizzes and see whether they
-  want variants.
-- **Print CSS** is adequate for quizzes, not for a polished book.
+- **No quizzes** means the course does not hand a teacher anything to grade.
+  Ask the teachers using it whether writing their own from the practice
+  problems is too much work.
+- **Print CSS** is adequate for a lesson, not for a polished book.
 
 ## References
 

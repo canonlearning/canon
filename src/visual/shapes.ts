@@ -17,6 +17,22 @@ export function ball(color: number, radius: number): THREE.Mesh {
   return new THREE.Mesh(new THREE.SphereGeometry(radius, 20, 14), solid(color));
 }
 
+// A box standing on the floor, centered at (x, y). Its top is `height`
+// above the floor. To change the height later, set box.scale.y: the box
+// stays on the floor.
+export function block(
+  x: number,
+  y: number,
+  size: { width: number; depth: number; height: number },
+  color: number,
+): THREE.Mesh {
+  const box = new THREE.BoxGeometry(size.width, size.height, size.depth);
+  box.translate(0, size.height / 2, 0); // the bottom face is on the floor
+  const mesh = new THREE.Mesh(box, solid(color));
+  mesh.position.set(x, 0, y);
+  return mesh;
+}
+
 // A thin post with a ball on top, standing on the floor at (x, y).
 export function post(x: number, y: number, options: { color: number; height: number }): THREE.Group {
   const material = solid(options.color);

@@ -6,5 +6,3 @@ lessons:
   - id: first-lesson
     problems:
       - coin-flips
-    practice_quiz:
-      - coin-flips

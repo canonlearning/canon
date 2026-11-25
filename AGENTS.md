@@ -3,8 +3,7 @@
 The engine behind canonlearning.ai: open courses with interactive visuals, an
 in-class kit, and a problem bank, graded on paper. Built so far: static
 pages for lessons with typeset math and interactive visuals, practice
-problems with worked solutions, and printable quizzes with an answer key. The
-in-class kit is not built.
+problems with worked solutions. The in-class kit is not built.
 
 - The first course is the sibling repository `../probability-1`
   (`canonlearning/probability-1`). Course content goes there: lessons,
@@ -74,8 +73,7 @@ everything else.
 - The premise is subject-neutral. Probability 1 is the first course, not part
   of the argument, so keep it out of the premise and the design principles.
 - There are two layers, and the line is whether the software needs to know
-  who the student is. The course (lessons, visuals, problems, printable
-  quizzes) is a static site and never depends on anything else. Grades,
+  who the student is. The course (lessons, visuals, problems) is a static site and never depends on anything else. Grades,
   student tracking, and rosters are the school layer: a separate,
   open, self-hostable LMS that a school plugs into its own systems. Do not
   put accounts or student data in the course layer, and do not gate course
@@ -110,12 +108,11 @@ everything else.
   without knowing a framework. Numeric answers are stored exact.
 - An LLM may draft a visual or a problem. A person verifies each one before
   it ships, and every problem and its solution is hand-checked.
-- Everything published is public, answer keys included, so a published quiz
-  is a practice quiz. A graded quiz is the teacher's own: it lives in the
-  course's `private/` folder, which git ignores, and only the dev server
-  builds it. `npm run build` must never write a private quiz or problem.
-- No problem variants, placeholders, or quiz seeds in v1. They are added
-  later only if the teachers writing quizzes ask for them.
+- Everything published is public, solutions included, so the course
+  publishes practice problems and no quizzes, and the engine builds none. A
+  graded quiz is the teacher's own, written outside the course by changing
+  the published problems. Do not add quiz pages or a private content folder.
+- No problem variants, placeholders, or seeds in v1.
 
 ## Writing
 

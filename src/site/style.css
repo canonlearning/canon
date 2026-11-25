@@ -159,8 +159,10 @@ figure.visual > * {
   display: block;
 }
 
-/* Before the script has loaded, hold the space with an empty panel. */
-figure.visual > :not(:defined) {
+/* Before the script has loaded, and until the visual comes near the screen
+   and starts, hold the space with an empty panel. */
+figure.visual > :not(:defined),
+figure.visual > :empty {
   aspect-ratio: 3 / 2;
   border-radius: 8px;
   background: #f2f1ed;
@@ -375,7 +377,29 @@ h4 {
   border-top: 1.5px solid var(--text);
 }
 
+/* Each problem is set apart by a thin rule and its number. */
+.problem {
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+
+.problem-number {
+  margin: 0 0 0.2rem;
+  color: #3a74b8;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.problem h3 {
+  margin-top: 0;
+}
+
 .problem details {
+  margin-top: 1.4rem;
   margin-bottom: 0.5rem;
   border: 1px solid var(--rule);
   border-radius: 6px;
@@ -397,6 +421,11 @@ h4 {
   margin-right: 0.9rem;
 }
 
+/* A table is as wide as the box, less the two margins. */
+.problem details > table {
+  width: calc(100% - 1.8rem);
+}
+
 .problem details > :nth-child(2) {
   margin-top: 1rem;
 }
@@ -405,47 +434,8 @@ h4 {
   margin-bottom: 1rem;
 }
 
-/* The link to the practice quiz, at the end of a lesson. */
-.quiz-link {
-  margin-top: 2rem;
-}
-
-/* The quiz page, on screen. */
-.print-note {
-  padding: 0.6rem 0.9rem;
-  background: var(--tint);
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.quiz-name-line span {
-  display: inline-block;
-  width: 16rem;
-  border-bottom: 1px solid var(--text);
-}
-
-.quiz ol,
-.answer-key ol {
-  padding-left: 1.4rem;
-}
-
-.quiz-question,
-.key-entry {
-  margin-bottom: 1.5rem;
-}
-
-.working-space {
-  height: 14rem;
-}
-
 .answer p {
   display: inline;
-}
-
-.answer-key {
-  margin-top: 4rem;
-  padding-top: 2rem;
-  border-top: 1.5px dashed var(--rule);
 }
 
 @media (max-width: 30rem) {
@@ -454,8 +444,7 @@ h4 {
   }
 }
 
-/* Printing. Used for quizzes: black on white, no site header, and the
-   answer key on a new sheet. */
+/* Printing a lesson: black on white, with no site header. */
 @media print {
   @page {
     margin: 2cm;
@@ -470,8 +459,7 @@ h4 {
     color: #000;
   }
 
-  .site-header,
-  .print-note {
+  .site-header {
     display: none;
   }
 
@@ -480,21 +468,12 @@ h4 {
     padding: 0;
   }
 
-  .quiz-question {
-    break-inside: avoid;
-  }
-
-  /* A key entry can be longer than a page, so it may break, but not just
-     after a heading. */
+  /* A page does not break just after a heading. */
   h1,
   h2,
   h3,
   h4 {
     break-after: avoid;
-  }
-
-  .working-space {
-    height: 8cm;
   }
 
   /* A printed visual is a picture, so its controls are left out. */
@@ -526,12 +505,5 @@ h4 {
   .fig-label {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
-  }
-
-  .answer-key {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-    break-before: page;
   }
 }

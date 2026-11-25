@@ -11,7 +11,7 @@ needs to know who the student is.
 
 | | The course | The school layer |
 |---|---|---|
-| What it is | Lessons, visuals, in-class kit, problem bank, printable quizzes | Grades, student tracking, rosters |
+| What it is | Lessons, visuals, in-class kit, problem bank | Grades, student tracking, rosters |
 | Knows who the student is | No | Yes |
 | Runs as | A static site | A service with logins and a database |
 | Who runs it | Anyone: the author, a teacher with a fork | A school, on its own systems |
@@ -20,9 +20,9 @@ needs to know who the student is.
 
 **The course** is the open display of information and the structure around
 it. A student can read it without an account, and a teacher can run a whole
-class from it out of the box: present the visuals, assign the practice, print
-the quizzes, and mark them by hand in whatever gradebook they already keep. It
-stores no student data.
+class from it out of the box: present the visuals, assign the practice, write
+quizzes from the problems, and mark them by hand in whatever gradebook they
+already keep. It stores no student data.
 
 **The school layer** is a standalone LMS. Once a teacher wants grades recorded and
 students tracked, the software holds student records, and those belong to the
@@ -99,7 +99,7 @@ schools, and funders.
 What this rules out:
 
 - An exam or answer bank behind a paywall or an instructor login. The
-  published quizzes are practice, with public answer keys. A teacher's graded
-  quiz is the teacher's own and stays off the site.
+  course publishes practice problems with their solutions and no quizzes. A
+  teacher's graded quiz is the teacher's own and stays off the site.
 - A non-commercial content license with paid commercial terms.
 - A school layer that is closed, or sold on being hard to leave.

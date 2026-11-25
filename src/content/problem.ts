@@ -43,20 +43,10 @@ export type SolutionStep = {
   html: string;
 };
 
-// Public problems are in problems/. A private quiz may also use problems
-// in private/problems/, which is looked in first when `includePrivate` is
-// set.
-export async function readProblem(
-  courseDir: string,
-  id: string,
-  includePrivate = false,
-): Promise<Problem> {
-  const publicFile = path.join(courseDir, "problems", `${id}.md`);
-  const privateFile = path.join(courseDir, "private", "problems", `${id}.md`);
-
-  const file = includePrivate && existsSync(privateFile) ? privateFile : publicFile;
+export async function readProblem(courseDir: string, id: string): Promise<Problem> {
+  const file = path.join(courseDir, "problems", `${id}.md`);
   if (!existsSync(file)) {
-    throw new Error(`${file}: not found. A lesson or quiz lists a problem "${id}".`);
+    throw new Error(`${file}: not found. A lesson lists a problem "${id}".`);
   }
   return problemTextToProblem(readFileSync(file, "utf8"), file, id);
 }

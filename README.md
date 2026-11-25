@@ -7,8 +7,7 @@ engine. The first course is
 [Probability 1](https://github.com/canonlearning/probability-1). So far the
 engine turns a course folder into a static site: Markdown lessons with
 typeset math and interactive visuals drawn with three.js, practice problems
-with worked solutions, and quizzes that print with an answer key (published
-practice quizzes, and a teacher's private graded ones). One lesson with two
+with worked solutions. One lesson with two
 visuals exists. The in-class kit is not built. The
 [plan](docs/PLAN.md) has the pilot scope and the tech picks.
 
@@ -54,16 +53,16 @@ not started and will not be until people are using the course.
 |---|---|
 | Reading | Markdown lessons with embedded interactive visuals |
 | In-class kit | Visuals in presentation mode, one motivating problem per lesson, discussion prompts |
-| Problems | Worked examples, problem sets with solutions, quiz and exam bank |
+| Problems | Worked examples, problem sets with solutions |
 | Logistics | Syllabus map, pacing guide |
 
 ## Design principles
 
 - **Homework is ungraded practice, done by hand.** Any take-home problem can be
   done by an LLM, so it is not a measure.
-- **Grades come from short in-class paper quizzes.** The published quizzes
-  are for practice, since their answer keys are public. A teacher writes the
-  graded quiz and keeps it private, and the platform prints both.
+- **Grades come from short in-class paper quizzes.** The published
+  problems are for practice, since their solutions are public. A teacher
+  writes the graded quiz, starting from those problems, and keeps it private.
 - **Content is forkable.** Lessons are Markdown, so teachers can reorder, cut,
   and add examples.
 - **LLMs help the author freely.** Visuals are drafted with an LLM and verified

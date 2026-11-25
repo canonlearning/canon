@@ -40,12 +40,6 @@ test("a problem without an answer is an error", async () => {
 
 test("a problem listed in course.yaml but missing on disk is an error", async () => {
   await expect(readProblem(exampleCourse, "no-such-problem")).rejects.toThrow(
-    'not found. A lesson or quiz lists a problem "no-such-problem".',
+    'not found. A lesson lists a problem "no-such-problem".',
   );
-});
-
-test("a private problem is found only when private problems are included", async () => {
-  const problem = await readProblem(exampleCourse, "secret-problem", true);
-  expect(problem.title).toBe("Three heads");
-  await expect(readProblem(exampleCourse, "secret-problem")).rejects.toThrow("not found");
 });

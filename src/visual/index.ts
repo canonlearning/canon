@@ -16,6 +16,6 @@ export {
 } from "./fraction.ts";
 export { cssColor, palette } from "./palette.ts";
 export { seededRandom } from "./random.ts";
-export { ball, floorLine, floorPatch, post, solid } from "./shapes.ts";
+export { ball, block, floorLine, floorPatch, post, solid } from "./shapes.ts";
 export { floor, Stage, type StageLabel, type StageOptions } from "./stage.ts";
 export { Visual } from "./visual.ts";

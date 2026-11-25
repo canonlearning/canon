@@ -15,6 +15,7 @@ export class Figure {
   private readonly controlsBox = element("div", "fig-controls");
   private readonly captionBox = element("figcaption", "fig-caption");
   private cleanups: (() => void)[] = [];
+  private printSteps: (() => void)[] = [];
 
   constructor(host: HTMLElement) {
     this.canvasBox.append(this.labelBox);
@@ -113,6 +114,16 @@ export class Figure {
   // Shown in place of the drawing when a visual fails to start.
   showError(message: string): void {
     this.canvasBox.replaceChildren(element("div", "fig-error", message));
+  }
+
+  // `step` is called just before the page is printed. A stage uses it to
+  // draw the end of its animation as a still picture.
+  onPrint(step: () => void): void {
+    this.printSteps.push(step);
+  }
+
+  prepareForPrint(): void {
+    for (const step of this.printSteps) step();
   }
 
   onDispose(cleanup: () => void): void {

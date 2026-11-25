@@ -1,11 +1,5 @@
 // Reads course.yaml, the manifest at the root of a course folder. It
-// lists the lessons in order, and for each lesson its practice problems
-// and the problems on its practice quiz.
-//
-// A practice quiz is published with its answer key, so it is for study and
-// not for grading. A teacher's graded quizzes are private: they are listed
-// in private/quizzes.yaml, a folder that git ignores, and they are built
-// only on the teacher's own computer.
+// lists the lessons in order, and for each lesson its practice problems.
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -16,20 +10,11 @@ export type Course = {
   title: string;
   description: string;
   lessons: LessonEntry[];
-  privateQuizzes: QuizEntry[];
 };
 
 export type LessonEntry = {
   id: string;
   // The practice problems shown at the end of the lesson.
-  problemIds: string[];
-  // The problems on the lesson's practice quiz. Empty means no quiz.
-  practiceQuizProblemIds: string[];
-};
-
-export type QuizEntry = {
-  id: string;
-  title: string;
   problemIds: string[];
 };
 
@@ -53,10 +38,6 @@ export function readCourse(courseDir: string): Course {
     return {
       id: requireString(entry?.id, `${file}: ${name} needs an "id".`),
       problemIds: stringList(entry?.problems, `${file}: the "problems" of ${name}`),
-      practiceQuizProblemIds: stringList(
-        entry?.practice_quiz,
-        `${file}: the "practice_quiz" of ${name}`,
-      ),
     };
   });
 
@@ -65,29 +46,7 @@ export function readCourse(courseDir: string): Course {
     title: manifest.title,
     description: manifest.description ?? "",
     lessons,
-    privateQuizzes: readPrivateQuizzes(courseDir),
   };
-}
-
-function readPrivateQuizzes(courseDir: string): QuizEntry[] {
-  const file = path.join(courseDir, "private", "quizzes.yaml");
-  if (!existsSync(file)) return [];
-  return quizEntries(parseYaml(readFileSync(file, "utf8"))?.quizzes, file);
-}
-
-// A missing list of quizzes is an empty list.
-function quizEntries(list: unknown, file: string): QuizEntry[] {
-  if (list === undefined || list === null) return [];
-  if (!Array.isArray(list)) throw new Error(`${file}: the quizzes must be a list.`);
-
-  return list.map((entry: any, index: number) => {
-    const name = `quiz ${index + 1}`;
-    return {
-      id: requireString(entry?.id, `${file}: ${name} needs an "id".`),
-      title: requireString(entry?.title, `${file}: ${name} needs a "title".`),
-      problemIds: stringList(entry?.problems, `${file}: the "problems" of ${name}`),
-    };
-  });
 }
 
 function requireString(value: unknown, message: string): string {

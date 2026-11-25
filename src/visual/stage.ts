@@ -159,15 +159,16 @@ export class Stage {
     printImage.alt = "";
     box.prepend(printImage);
     const drawForPrint = () => {
+      resize();
       this.onFrame(1000);
+      orbit.update();
       this.renderer.render(this.scene, this.camera);
       this.placeLabels();
       printImage.src = this.renderer.domElement.toDataURL("image/png");
     };
-    window.addEventListener("beforeprint", drawForPrint);
+    figure.onPrint(drawForPrint);
 
     figure.onDispose(() => {
-      window.removeEventListener("beforeprint", drawForPrint);
       cancelAnimationFrame(frameRequest);
       resizeObserver.disconnect();
       visibilityObserver.disconnect();

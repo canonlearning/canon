@@ -1,7 +1,5 @@
 // The dev server: builds the course, serves dist/, and rebuilds and
-// reloads the browser when a file in the course folder changes. It also
-// builds the quizzes in the course's private/ folder, which the build
-// command leaves out.
+// reloads the browser when a file in the course folder changes.
 
 import { existsSync, readFileSync, statSync, watch } from "node:fs";
 import { createServer, type ServerResponse } from "node:http";
@@ -29,7 +27,7 @@ export async function startDevServer(courseDir: string): Promise<void> {
 
   async function rebuild(): Promise<void> {
     try {
-      await buildSite(courseDir, { liveReload: true, includePrivate: true });
+      await buildSite(courseDir, { liveReload: true });
       for (const page of openPages) page.write("data: reload\n\n");
     } catch (error) {
       // A mistake in a lesson file should not stop the server.

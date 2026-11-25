@@ -1,7 +1,0 @@
-# A private quiz may use private problems and public ones.
-quizzes:
-  - id: graded-quiz
-    title: Graded quiz
-    problems:
-      - secret-problem
-      - coin-flips

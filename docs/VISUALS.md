@@ -97,12 +97,16 @@ export default class Crowd extends Visual {
   three.js objects to `stage.scene` and moves them in `stage.onFrame`.
   `floor(x, y, height)` makes a position, and `stage.label` makes a text
   label that follows a point.
-- `ball`, `post`, `floorLine`, `floorPatch`, and `solid` are small helpers,
+- `ball`, `block`, `post`, `floorLine`, `floorPatch`, and `solid` are small
+  helpers,
   and `fractionFrom`, `times`, `plus`, and the other fraction functions keep
   numbers exact.
   `THREE` is the whole of three.js for anything else.
 - A visual runs by itself when it comes on screen (people arriving one
   after another), so there is motion before the reader touches a control.
+- `build` is called when the visual first comes near the screen, not when
+  the page loads. A visual in a closed solution starts when the solution is
+  opened, so its animation begins at its first step.
 - The numbers a visual shows are constants at the top of its file. A visual
   that is reused with different numbers reads them from its `::visual` line
   with `this.getAttribute("probability")`; anything on the line besides
@@ -110,7 +114,9 @@ export default class Crowd extends Visual {
 - Every stage has a Pause button in the corner of its canvas, so the reader
   can stop a visual at any step. A visual does nothing to get it.
 - Before a page is printed, the stage runs the scene far ahead and draws it
-  once, so a printed visual shows the end of its animation.
+  once, so a printed visual shows the end of its animation. A visual that
+  has not started yet is started for the printout. Anything else that must
+  happen before printing goes in `figure.onPrint`.
 
 The engine source for these is `src/visual/`.
 
