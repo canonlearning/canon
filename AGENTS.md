@@ -256,7 +256,8 @@ new slide. What is on a slide decides how it is laid out:
 
 - A lesson has one deck. A lesson that takes more than one class has a
   slide that ends each part, not a deck for each class.
-- A deck does not look like the reading page: it is white and sans-serif,
+- A deck does not look like the reading page: it is sans-serif, on the
+  same paper color as a lesson,
   with ordinary font weights and a slim headline. Do not make headlines
   heavy or tall.
 - A deck is not the lesson cut into slides, in content or in looks. Do not

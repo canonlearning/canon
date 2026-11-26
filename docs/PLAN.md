@@ -310,7 +310,8 @@ Marp, Slidev, and reveal.js are references for how Markdown slides behave.
   late bus, and two students called on in turn. A lesson that takes two
   classes has one deck, with a slide that ends the first part. What the
   teacher says is in the notes.
-- **A deck has its own look.** It is white and sans-serif with a slim
+- **A deck has its own look.** It is sans-serif on the lesson's paper
+  color, with a slim
   headline, not the serif reading column of a lesson page. What is written
   on a slide decides its layout: a visual fills the slide, a list shows its
   points one at a time, a numbered list is the choices of a vote, a
