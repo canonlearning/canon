@@ -19,7 +19,7 @@ export type PageOptions = {
 export function homePage(course: Course, lessons: Lesson[], options: PageOptions): string {
   const rows = lessons.map((lesson) => {
     const summary = course.lessons.find((entry) => entry.id === lesson.id)?.summary ?? "";
-    const link = `<a href="/lessons/${lesson.id}/">${escapeHtml(lesson.title)}</a>`;
+    const link = `<a href="lessons/${lesson.id}/">${escapeHtml(lesson.title)}</a>`;
     return `<li>${link}${summary ? `: <span class="lesson-summary">${escapeHtml(summary)}</span>` : ""}</li>`;
   });
 
@@ -31,7 +31,7 @@ export function homePage(course: Course, lessons: Lesson[], options: PageOptions
       ${rows.join("\n")}
     </ol>`;
 
-  return layout(course.title, course, body, options);
+  return layout(course.title, course, body, HOME_TO_ROOT, options);
 }
 
 // `problems` are the practice problems for this lesson, in order. The
@@ -57,7 +57,7 @@ export function lessonPage(
     ${lessonLinks(course, lesson)}
     ${lesson.html}${practice}`;
 
-  return layout(`${lesson.title} | ${course.title}`, course, body, options);
+  return layout(`${lesson.title} | ${course.title}`, course, body, LESSON_TO_ROOT, options);
 }
 
 // Small icons for the links under a lesson's title: a screen for slides,
@@ -76,7 +76,7 @@ function lessonLinks(course: Course, lesson: Lesson): string {
   lectureIds.forEach((lectureId, index) => {
     // A lesson with several decks numbers them: Slides 1, Slides 2.
     const name = lectureIds.length === 1 ? "Slides" : `Slides ${index + 1}`;
-    links.push(`<a href="/lectures/${lectureId}.html">${SLIDES_ICON}${name}</a>`);
+    links.push(`<a href="${LESSON_TO_ROOT}lectures/${lectureId}.html">${SLIDES_ICON}${name}</a>`);
     if (course.sourceUrl) {
       links.push(`<a href="${escapeHtml(course.sourceUrl)}/lectures/${lectureId}.md">${SOURCE_ICON}${name} source</a>`);
     }
@@ -110,20 +110,28 @@ function solutionStep(step: { name: string; html: string }, index: number): stri
           ${step.html}`;
 }
 
-function layout(pageTitle: string, course: Course, body: string, options: PageOptions): string {
+// Every link inside the site is relative, so the site works at any
+// address: at the root of a domain, in a folder of one (such as
+// canonlearning.ai/probability-1), or in a teacher's fork on another host.
+// A page reaches the rest of the site through the path from its own folder
+// to the root of the site.
+const HOME_TO_ROOT = "./"; // the home page is index.html at the root
+const LESSON_TO_ROOT = "../../"; // a lesson is lessons/<id>/index.html
+
+function layout(pageTitle: string, course: Course, body: string, toRoot: string, options: PageOptions): string {
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(pageTitle)}</title>
-  <link rel="stylesheet" href="/assets/katex/katex.min.css">
-  <link rel="stylesheet" href="/assets/style.css">
-  ${options.hasVisuals ? '<script type="module" src="/assets/visuals.js"></script>' : ""}
+  <link rel="stylesheet" href="${toRoot}assets/katex/katex.min.css">
+  <link rel="stylesheet" href="${toRoot}assets/style.css">
+  ${options.hasVisuals ? `<script type="module" src="${toRoot}assets/visuals.js"></script>` : ""}
 </head>
 <body>
   <header class="site-header">
-    <a href="/">${escapeHtml(course.title)}</a>
+    <a href="${toRoot}">${escapeHtml(course.title)}</a>
   </header>
   <main>${body}
   </main>

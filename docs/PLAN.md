@@ -263,6 +263,9 @@ call is all that is needed. If this becomes a product,
 the engine is what ships, and that needs the control. "Own" means owning the
 shell, not rewriting the bundler or the parser.
 
+- **Every link inside the site is relative.** The built site works at any
+  address with no setting: the root of a domain, a folder of one
+  (`canonlearning.ai/probability-1`), or a teacher's fork on another host.
 - **Content core:** a library that parses lessons and problem files into
   structured data. Lesson pages read from it. This is the
   platform.

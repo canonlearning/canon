@@ -19,13 +19,13 @@ test("building the example course writes the home page, lesson, and assets", asy
   const outDir = await buildSite(copyOfExampleCourse());
 
   const home = readFileSync(path.join(outDir, "index.html"), "utf8");
-  expect(home).toContain('<a href="/lessons/first-lesson/">The first lesson</a>');
+  expect(home).toContain('<a href="lessons/first-lesson/">The first lesson</a>');
   expect(home).toContain(': <span class="lesson-summary">A lesson for the tests.</span>');
   expect(home).not.toContain("quiz");
 
   const lesson = readFileSync(path.join(outDir, "lessons/first-lesson/index.html"), "utf8");
   expect(lesson).toContain("<h1>The first lesson</h1>");
-  expect(lesson).toContain('href="/lectures/first-lecture.html"');
+  expect(lesson).toContain('href="../../lectures/first-lecture.html"');
   expect(lesson).toContain('href="https://example.org/course/blob/main/lectures/first-lecture.md"');
   expect(lesson).toContain('href="https://example.org/course/blob/main/lessons/first-lesson.md"');
   expect(lesson).toContain("<h3>Two heads</h3>");
@@ -47,7 +47,7 @@ test("the course's visuals are bundled into one script that the pages load", asy
   expect(script).toContain('customElements.define("visual-example-visual"');
 
   const lesson = readFileSync(path.join(outDir, "lessons/first-lesson/index.html"), "utf8");
-  expect(lesson).toContain('<script type="module" src="/assets/visuals.js"></script>');
+  expect(lesson).toContain('<script type="module" src="../../assets/visuals.js"></script>');
 });
 
 test("a lecture deck is one file that holds its styles, fonts, and scripts", async () => {
