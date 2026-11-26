@@ -416,8 +416,16 @@ with both repositories cloned side by side. It is kept while the author is
 the only one building, because a change to the engine shows up in the course
 at once, with no version to bump.
 
-It changes when the site first goes online, because the automatic build
-needs it too:
+The automatic build uses the same layout. Each course repository has a
+GitHub Action that checks out the engine beside the course, builds it, and
+publishes it with GitHub Pages. The landing site, `canonlearning.ai`, is the
+repository `canonlearning/canonlearning.github.io`, and GitHub serves a
+course repository named `probability-1` at `canonlearning.ai/probability-1`.
+A fork of a course publishes its own site the same way.
+
+That build always uses the newest engine. It changes when a course needs to
+stay on a fixed version of the engine, or to be built with no sibling
+folder:
 
 - The course's `package.json` names the engine as a dependency at a tagged
   version, pointing at the `canonlearning/canon` GitHub repository or at an
