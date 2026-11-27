@@ -50,8 +50,11 @@ the tests.
 | `docs/MODEL.md` | The two layers (course and school LMS) and the funding in detail |
 | `docs/PLAN.md` | What is built, pilot scope, open questions, tech picks |
 | `docs/VISUALS.md` | How visuals look and behave, and the gtcloudrobotics.com figures they are styled after |
+| `docs/NEW-LESSON.md` | The order of work for a new lesson: research, reading, figures, problems, deck, review |
 
-Read `docs/PLAN.md` before writing code. A change to scope or to a tech pick
+Read `docs/PLAN.md` before writing code. Follow `docs/NEW-LESSON.md` when
+asked for a new lesson: it gives the passes, and the two points at which to
+stop for the author. A change to scope or to a tech pick
 goes in the plan in the same change. Detail that does not belong in the
 README goes in `docs/`, not in the bin.
 
