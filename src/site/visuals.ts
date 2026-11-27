@@ -45,7 +45,7 @@ export async function bundleVisuals(
     minify: options.minify,
     logLevel: "silent",
     // A visual writes import ... from "canon". That name, and three.js,
-    // are found in this repository, so a course installs nothing.
+    // are found from this folder, wherever the engine is installed.
     alias: { canon: path.join(ENGINE_DIR, "src/visual/index.ts") },
     nodePaths: [path.join(ENGINE_DIR, "node_modules")],
   });

@@ -22,12 +22,15 @@ HTML file.
 - `npm test` and `npm run typecheck` in this repository.
 - `npm run dev` in `../probability-1` serves the course at
   `http://localhost:4000` and rebuilds on save. `npm run build` writes the
-  site to `dist/`. Both call `src/cli.ts` here by its sibling path. That is
-  a shortcut for now; `docs/PLAN.md` ("How a course gets the engine") has
-  what replaces it when the site goes online.
+  site to `dist/`. Both run the `canon` command, `bin/canon.js` here.
+- A course lists the engine as a dependency, so `npm install` in a course
+  downloads the newest engine from GitHub. To build the course with this
+  folder's engine instead, run `npm link ../canon` in the course once. It
+  has to be run again after an `npm install` there.
 - Node runs the TypeScript directly, so there is no compile step. Imports end
   in `.ts`, and syntax that needs compiling (enums, parameter properties) is
-  not used.
+  not used. `bin/canon.js` is the one JavaScript file: Node will not run
+  TypeScript from `node_modules`, so it loads the engine's files there.
 
 `src/content/` reads a course folder into data, and `src/site/` turns that
 data into pages and lecture decks and bundles the course's visuals with
@@ -36,7 +39,7 @@ runs in the browser: the base class, the figure frame, and the three.js stage
 that a course's visuals import as `"canon"`. `example/` is a small course for
 the tests.
 
-- `npx tsc --noEmit -p ../probability-1` typechecks the course's visuals.
+- `npm run typecheck` in `../probability-1` typechecks the course's visuals.
 - Look at a visual in a browser before calling it done. The Playwright MCP
   server is set up for this repository; its output folder `.playwright-mcp/`
   is ignored by git.

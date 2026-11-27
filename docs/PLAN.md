@@ -397,9 +397,9 @@ what makes "fork the course" and separate licenses work.
 - `problems/`: one file per problem, with named solution steps.
 - `lectures/`: one Markdown slide deck per lesson.
 - `visuals/`: one TypeScript file per visual.
-- `package.json` with the `dev` and `build` commands. They run the engine
-  from the sibling `../canon` folder for now; a pinned version and the deploy
-  config come when the site is published.
+- `package.json` with the `dev` and `build` commands, and the engine as its
+  one dependency.
+- `.github/workflows/publish.yml`, which builds and publishes the site.
 
 `canonlearning/canon`, the engine (MIT):
 
@@ -411,32 +411,31 @@ what makes "fork the course" and separate licenses work.
 
 ### How a course gets the engine
 
-For now the course runs the engine from a sibling folder: its `dev` and
-`build` commands call `../canon/src/cli.ts`. That only works on a machine
-with both repositories cloned side by side. It is kept while the author is
-the only one building, because a change to the engine shows up in the course
-at once, with no version to bump.
+A course's `package.json` lists the engine as a dependency, pointing at the
+`canonlearning/canon` repository on GitHub. Someone clones only the course,
+runs `npm install`, which downloads the engine, and then `npm run dev` or
+`npm run build`. Both run the engine's `canon` command.
 
-The automatic build uses the same layout. Each course repository has a
-GitHub Action that checks out the engine beside the course, builds it, and
-publishes it with GitHub Pages. The landing site, `canonlearning.ai`, is the
-repository `canonlearning/canonlearning.github.io`, and GitHub serves a
-course repository named `probability-1` at `canonlearning.ai/probability-1`.
-A fork of a course publishes its own site the same way.
+The engine has no compile step. Node runs TypeScript directly from a local
+folder but refuses to for an installed dependency, so the `canon` command is
+a small JavaScript file that loads the engine's TypeScript with esbuild.
 
-That build always uses the newest engine. It changes when a course needs to
-stay on a fixed version of the engine, or to be built with no sibling
-folder:
+A course has no lock file, so an install always gets the newest engine.
+There are no tagged versions. If an engine change breaks a course, the
+course is updated. Pinning a course to a tag is the change to make if that
+becomes a burden.
 
-- The course's `package.json` names the engine as a dependency at a tagged
-  version, pointing at the `canonlearning/canon` GitHub repository or at an
-  npm package.
-- Someone clones only the course repository and runs `npm install`, which
-  downloads the engine.
-- The engine gains a compile step. Node runs TypeScript directly from a local
-  folder but refuses to for an installed dependency.
-- A teacher with a fork edits files on GitHub and an automatic build
-  publishes the site, so most teachers install nothing.
+To work on the engine and a course together, the author runs
+`npm link ../canon` in the course, which makes the course use the engine
+folder beside it.
+
+Each course repository has a GitHub Action that installs the engine, builds
+the course, and publishes it with GitHub Pages on every push. The landing
+site, `canonlearning.ai`, is the repository
+`canonlearning/canonlearning.github.io`, and GitHub serves a course
+repository named `probability-1` at `canonlearning.ai/probability-1`. A fork
+of a course publishes its own site the same way, so a teacher with a fork
+can edit files on GitHub and install nothing.
 
 ### Identity and LMS (deferred)
 
