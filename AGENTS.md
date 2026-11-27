@@ -11,8 +11,6 @@ HTML file.
   problems, and visuals specific to that course. This repository holds the
   content parser, the site shell, the visual base class, and an example
   course.
-- Order of work: write the first lesson and problem file by hand in
-  `../probability-1`, then build the engine here to make them render.
 - Code is MIT, here and in the course repository. Course content (lessons,
   problems, solutions) is CC BY 4.0. Do not change either without being
   asked.
@@ -50,7 +48,7 @@ the tests.
 |---|---|
 | `README.md` | The premise, the bet, who it is for, what a course contains, design principles, positioning, open model |
 | `docs/MODEL.md` | The two layers (course and school LMS) and the funding in detail |
-| `docs/PLAN.md` | First milestone, pilot scope, open questions, tech picks |
+| `docs/PLAN.md` | What is built, pilot scope, open questions, tech picks |
 | `docs/VISUALS.md` | How visuals look and behave, and the gtcloudrobotics.com figures they are styled after |
 
 Read `docs/PLAN.md` before writing code. A change to scope or to a tech pick
@@ -103,11 +101,11 @@ everything else.
   directives), the problem schema (one file per problem, one fixed version,
   named solution steps), and visuals as Web Components on one base class. Ask
   before changing any of them.
-- The shell is timeboxed to about a week. Keep it thin; the content core is
+- The shell is thin and stays thin; the content core is
   the platform.
 - Lessons and problems are plain Markdown. Custom syntax has to earn its
-  place: only `::visual` and the `:::details` drop-down exist. Do not add a
-  directive for styling or for anything a heading, blockquote, or
+  place: only `::visual` exists, and a `:::details` drop-down is planned. Do
+  not add a directive for styling or for anything a heading, blockquote, or
   `course.yaml` entry can express.
 - A teacher must be able to read and edit a lesson or problem file in a fork
   without knowing a framework. Numeric answers are stored exact.

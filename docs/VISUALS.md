@@ -134,6 +134,18 @@ export default class Crowd extends Visual {
 
 The engine source for these is `src/visual/`.
 
+## Many visuals on one page
+
+A visual starts only when it first comes near the screen, because a page
+with many problems would otherwise open a 3D drawing for each at load, and
+a browser allows a limited number. A visual that has scrolled far away is
+not released; that is added when a page holds more visuals than a browser
+allows.
+
+Probability 1 has four reusable visuals so far: a probability tree and an
+area square (two events in steps), a grid of equally likely outcomes
+(dice), and a two-way table of counts filled with balls.
+
 ## What does not carry over
 
 That site loads figures as plain script files with no bundler. Here a visual
