@@ -126,7 +126,8 @@ times and compare the frequencies against the computed answer.
   no quizzes, and each problem has one fixed version.
 - A full-screen page for each visual, and versioned addresses.
 - Short videos. They are an experiment outside v1; see "Short videos".
-- Any LLM at runtime
+- Any LLM at runtime. A tutor that answers a student's question on the
+  page is an experiment outside v1; see "Tutor".
 - Any backend or database
 - The school layer: accounts, class codes, grades, student tracking
 - Paid hosting, analytics
@@ -158,6 +159,7 @@ traction.
 | Print | HTML + print CSS | Yes |
 | In-class kit | Markdown slide decks built by the engine, one HTML file each | Yes |
 | Short videos | Remotion for the picture, ElevenLabs for the voice | No, an experiment |
+| Tutor | A model answers in the lesson format, through a relay that holds the key | No, an experiment |
 | Language and repos | TypeScript throughout, two repos | Yes |
 | Identity and LMS | Standalone LMS; class code, then school sign-on | Deferred, school layer |
 
@@ -383,6 +385,40 @@ Open: whose voice it is, where the shorts' source files live (this
 repository, the course, or one of their own), and how a wide slide drawing
 is laid out for a tall screen. None of this changes the course layer, and
 no video tool is needed to build or read a course.
+
+### Tutor
+
+Not built, and not to be started until students are using a course. A
+student on a lesson page asks a question, typed or spoken, and gets a short
+explanation with a drawing. The experiment is to find out what students ask
+and whether the answers help.
+
+- **The code is open and the tutor is optional.** A course builds and reads
+  the same without it. It is switched on by a setting that names a relay,
+  and a lesson page never depends on the relay being up.
+- **Whoever runs a site pays for its questions.** A model call needs a key,
+  which a static page cannot hold, so a small relay holds it. The relay on
+  `canonlearning.ai` uses the author's key. A fork gets the same tutor by
+  running the relay with its own key. Nothing is held back: what a fork
+  does not get is the author's money.
+- **The answer is written in the lesson format, not drawn freehand.** The
+  model returns a few sentences and a `::visual` line with the student's
+  numbers (a tree, a table, a grid), and the page renders it with the
+  course's own visuals, so the picture is exact and in the course's style.
+  A question that no existing visual fits gets text only.
+- **It sends the student back to paper.** The tutor explains an idea and
+  then asks for the work by hand. It does not work a practice problem for
+  the student.
+- **It stores nothing about the student.** There are no accounts, so the
+  relay keeps no record tied to a person, and the page says that a question
+  is sent to a model provider.
+- **Spending is capped.** The relay has a monthly limit (a couple of
+  hundred dollars on `canonlearning.ai` to start) and a limit per visitor.
+  When a limit is reached the page says so and the lesson is unaffected.
+
+Open: which model, where the relay runs, how the question is spoken
+(the browser's own speech recognition or a transcription service), and
+whether the first trial is one lesson or the whole course.
 
 ### Language and repos
 
