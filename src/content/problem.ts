@@ -2,7 +2,7 @@
 //
 //   ---
 //   title: A flagged email
-//   answer: 4/13
+//   answer: 1/3
 //   ---
 //
 //   The statement of the problem.
