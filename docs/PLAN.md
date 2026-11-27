@@ -8,8 +8,9 @@ are in the [model](MODEL.md).
 
 - **The engine**, in this repository: it reads a course folder and writes
   lesson pages, practice problems with worked solutions, and lecture decks.
-- **One lesson of Probability 1**, conditional probability, with its
-  visuals, five practice problems, and one lecture deck in two parts.
+- **Two lessons of Probability 1**, conditional probability and Bayes'
+  rule, each with its visuals, practice problems (five and six), and one
+  lecture deck in two parts.
 - **Publishing.** A course builds and publishes with a GitHub Action, and
   is served at `canonlearning.ai/probability-1`.
 - **The landing site**, `canonlearning.ai`, with the about page: the

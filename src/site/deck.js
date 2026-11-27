@@ -23,14 +23,17 @@ for (const visual of document.querySelectorAll("figure.visual > *")) {
 //
 //   - each point of a bulleted list after the first
 //   - each line after the first of a stacked calculation (a formula
-//     written with \begin{aligned})
+//     written with \begin{aligned}). A formula in a callout is a rule or a
+//     definition, and it appears whole.
 //
 // A part is a list of elements that appear together.
 const HIDDEN = "later";
 
 function partsOf(slide) {
   const points = [...slide.querySelectorAll(".slide-body > ul > li:not(:first-child)")];
-  const formulas = [...slide.querySelectorAll(".slide-body .katex-display")];
+  const formulas = [...slide.querySelectorAll(".slide-body .katex-display")].filter(
+    (formula) => formula.closest("blockquote") === null,
+  );
   return [...points.map((point) => [point]), ...formulas.flatMap(laterLinesOf)];
 }
 
