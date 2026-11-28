@@ -55,6 +55,10 @@ one meaning across its visuals.
 Other rules that carry over:
 
 - Randomness is seeded, so a figure shows the same thing on every load.
+- A figure shows one thing and then rests on it. It does not run on, or
+  speed up to cover ground.
+- Lines are thin, and fills are used the same way across a figure. No heavy
+  black outlines.
 - A figure appears only where it teaches something that a sentence, a table,
   or a formula does not.
 - A figure that could be mistaken for something it is not (a toy model

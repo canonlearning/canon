@@ -178,6 +178,10 @@ Order:
 - Add one new idea per section. Each section starts from where the last one
   ended and uses only what is already established.
 - A section heading may be the question the section answers.
+- The page does not describe itself ("This lesson uses one example."). One
+  sentence names the example ("Our example is an exam week.").
+- A heading, caption, or summary says what the thing is. No contrast
+  punchlines or teasers.
 
 Reasons:
 
@@ -194,6 +198,7 @@ Examples:
 - Reuse one running example through a lesson, so that only the idea changes
   from section to section.
 - Use numbers, not adjectives: "1 person in 100", not "rare".
+- An example needs no outside knowledge and no field vocabulary.
 
 Terms and symbols:
 

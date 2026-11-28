@@ -42,13 +42,13 @@ one university to the next.
 
 ### Pilot lesson sequence (draft, to be corrected)
 
-1. Experiments, outcomes, and events: the sample space.
+1. Experiments, outcomes, and events: the sample space. Built.
 2. The axioms, and what follows from them: complements, unions,
    inclusion-exclusion.
 3. Counting equally likely outcomes: permutations and combinations.
 4. Conditional probability and the multiplication rule: tree diagrams.
    Built.
-5. Total probability and Bayes' rule.
+5. Total probability and Bayes' rule. Built.
 6. Independence, and how it differs from disjointness.
 
 On paper, a student of this unit writes out a sample space, draws the tree
